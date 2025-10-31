@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Zero Viagens — Home</title>
+
+  <style>
+    /* ===== Reset mínimo + tokens ===== */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    img{max-width:100%;display:block}
+    :root{
+      --bg:#ffffff; --ink:#0f172a; --muted:#64748b;
+      --primary:#0ea5e9; --primary-ink:#ffffff;
+      --ring:#e2e8f0; --card:#f8fafc; --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:14px; --container:1100px; --space:16px;
+    }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    a{text-decoration:none;color:inherit}
+
+    /* ===== Utilitários ===== */
+    .container{max-width:var(--container);margin:0 auto;padding:0 var(--space)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid var(--ring);cursor:pointer;transition:.2s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn--primary{background:var(--primary);color:var(--primary-ink);border-color:transparent}
+    .btn--ghost{background:#fff}
+    .grid-2{display:grid;gap:24px}
+    @media (min-width: 900px){ .grid-2{grid-template-columns:1fr 1fr} }
+
+    /* ===== Header ===== */
+    .header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--ring)}
+    .header__inner{height:64px;display:flex;justify-content:space-between;align-items:center}
+    .logo{font-weight:800}
+    .logo__accent{color:var(--primary)}
+    .nav{display:none;gap:18px;align-items:center}
+    .hamburger{border:0;background:transparent;font-size:22px}
+    @media (min-width:900px){ .nav{display:flex} .hamburger{display:none} }
+
+    /* ===== Hero ===== */
+    .hero{position:relative}
+    .hero__img{width:100%;height:52vh;object-fit:cover}
+    .hero__content{position:absolute;inset:0;display:flex;flex-direction:column;justify-content:center;gap:8px;color:#fff;text-shadow:0 1px 2px rgba(0,0,0,.25);padding:0 var(--space)}
+    .hero h1{font-size:clamp(26px,4.8vw,44px);margin:0}
+    .hero p{font-size:clamp(14px,2.6vw,18px);margin:0 0 8px}
+    .cta{display:flex;gap:12px}
+    @media (max-width:560px){ .cta{flex-direction:column;align-items:flex-start} }
+
+    /* ===== Cards / seções ===== */
+    .section{padding:48px 0}
+    .card{background:var(--card);border:1px solid var(--ring);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+    .card__body{padding:14px 16px}
+    .cards{display:grid;gap:18px}
+    @media (min-width:700px){ .cards{grid-template-columns:repeat(3,1fr)} }
+    .dest img{aspect-ratio:16/10;object-fit:cover}
+    .muted{color:var(--muted)}
+
+    /* ===== Footer ===== */
+    .footer{border-top:1px solid var(--ring);padding:18px 0;background:#fff}
+    .footer__inner{display:flex;justify-content:space-between;align-items:center}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="logo" href="#">Zero <span class="logo__accent">Viagens</span></a>
+      <nav class="nav">
+        <a href="#sobre">Sobre</a>
+        <a href="#destinos">Destinos</a>
+        <a href="#blog">Blog</a>
+        <a class="btn btn--primary" href="planner.html">Planejar viagem</a>
+      </nav>
+      <button class="hamburger" aria-label="menu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <img class="hero__img" src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?q=80&w=1600&auto=format&fit=crop" alt="">
+      <div class="hero__content container">
+        <h1>Seu roteiro de viagem inteligente</h1>
+        <p>Inspirações, dicas e planejamento personalizado.</p>
+        <div class="cta">
+          <a class="btn btn--primary" href="planner.html">Comece agora</a>
+          <a class="btn btn--ghost" href="#destinos">Ver destinos</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="sobre" class="section container grid-2">
+      <div>
+        <h2>Quem somos</h2>
+        <p class="muted">Curadoria humana + tecnologia para montar roteiros no seu estilo e orçamento.</p>
+        <a class="btn btn--primary" href="planner.html">Planejar agora</a>
+      </div>
+      <div class="card">
+        <img src="https://images.unsplash.com/photo-1491553895911-0055eca6402d?q=80&w=1200&auto=format&fit=crop" alt="">
+      </div>
+    </section>
+
+    <section id="destinos" class="section container">
+      <h2>Destinos populares</h2>
+      <div class="cards">
+        <a class="card dest" href="planner.html?dest=Rio%20de%20Janeiro%2C%20RJ">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=1200&auto=format&fit=crop" alt="">
+          <div class="card__body"><strong>Rio de Janeiro</strong><div class="muted">Praias e trilhas</div></div>
+        </a>
+        <a class="card dest" href="planner.html?dest=Salvador%2C%20BA">
+          <img src="https://images.unsplash.com/photo-1516727003284-a96541e51e21?q=80&w=1200&auto=format&fit=crop" alt="">
+          <div class="card__body"><strong>Salvador</strong><div class="muted">História e culinária</div></div>
+        </a>
+        <a class="card dest" href="planner.html?dest=Gramado%2C%20RS">
+          <img src="https://images.unsplash.com/photo-1519677100203-a0e668c92439?q=80&w=1200&auto=format&fit=crop" alt="">
+          <div class="card__body"><strong>Gramado</strong><div class="muted">Natureza e charme</div></div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <p>© Zero Viagens</p>
+      <a class="btn btn--primary" href="planner.html">Planejar viagem</a>
+    </div>
+  </footer>
+</body>
+</html>

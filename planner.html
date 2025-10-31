@@ -1,0 +1,159 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>Planejar viagem — Zero Viagens</title>
+
+  <style>
+    /* ===== Reset + tokens (mesmos da home) ===== */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    img{max-width:100%;display:block}
+    :root{
+      --bg:#ffffff; --ink:#0f172a; --muted:#64748b;
+      --primary:#0ea5e9; --primary-ink:#ffffff;
+      --ring:#e2e8f0; --card:#f8fafc; --shadow:0 10px 30px rgba(15,23,42,.08);
+      --radius:14px; --container:1100px; --space:16px;
+    }
+    body{font-family:system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg)}
+    a{text-decoration:none;color:inherit}
+
+    /* Utilitários */
+    .container{max-width:var(--container);margin:0 auto;padding:0 var(--space)}
+    .btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid var(--ring);cursor:pointer;transition:.2s}
+    .btn:hover{transform:translateY(-1px)}
+    .btn--primary{background:var(--primary);color:var(--primary-ink);border-color:transparent}
+    .grid-2{display:grid;gap:24px}
+    @media (min-width: 900px){ .grid-2{grid-template-columns:1fr 1fr} }
+
+    /* Header */
+    .header{position:sticky;top:0;z-index:50;background:rgba(255,255,255,.9);backdrop-filter:blur(6px);border-bottom:1px solid var(--ring)}
+    .header__inner{height:64px;display:flex;justify-content:space-between;align-items:center}
+    .logo{font-weight:800}
+    .logo__accent{color:var(--primary)}
+    .nav{display:none;gap:18px;align-items:center}
+    .hamburger{border:0;background:transparent;font-size:22px}
+    @media (min-width:900px){ .nav{display:flex} .hamburger{display:none} }
+
+    /* Página */
+    .section{padding:32px 0}
+    .card{background:var(--card);border:1px solid var(--ring);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow)}
+    .card__body{padding:16px}
+    h1,h2{margin:0 0 12px}
+
+    /* Form */
+    form{display:grid;gap:12px}
+    label{display:grid;gap:6px;font-weight:600}
+    input[type="text"],input[type="date"],input[type="number"],input:not([type]){
+      width:100%;padding:12px;border-radius:10px;border:1px solid var(--ring);background:#fff
+    }
+    fieldset{border:1px solid var(--ring);border-radius:12px;padding:10px 12px}
+    legend{padding:0 6px;color:var(--muted)}
+    .actions{display:flex;gap:10px;flex-wrap:wrap}
+
+    /* Resultado */
+    .muted{color:var(--muted)}
+    .bullets{margin:8px 0 0 16px}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="logo" href="index.html">Zero <span class="logo__accent">Viagens</span></a>
+      <nav class="nav">
+        <a href="index.html#sobre">Sobre</a>
+        <a href="index.html#destinos">Destinos</a>
+        <a href="index.html#blog">Blog</a>
+      </nav>
+      <button class="hamburger" aria-label="menu">☰</button>
+    </div>
+  </header>
+
+  <main class="container section">
+    <div class="grid-2">
+      <!-- Formulário -->
+      <section class="card">
+        <div class="card__body">
+          <h1>Gerar roteiro</h1>
+          <form id="planner">
+            <label>Destino
+              <input id="dest" name="dest" placeholder="Rio de Janeiro, RJ" required />
+            </label>
+
+            <div class="grid-2">
+              <label>Check-in
+                <input type="date" name="start" required />
+              </label>
+              <label>Check-out
+                <input type="date" name="end" required />
+              </label>
+            </div>
+
+            <label>Pessoas
+              <input type="number" name="people" min="1" value="2" required />
+            </label>
+
+            <fieldset>
+              <legend>Interesses</legend>
+              <label><input type="checkbox" name="interests" value="praia"> Praia</label>
+              <label><input type="checkbox" name="interests" value="futebol"> Futebol</label>
+              <label><input type="checkbox" name="interests" value="culinaria_regional"> Culinária regional</label>
+            </fieldset>
+
+            <fieldset>
+              <legend>Orçamento (R$)</legend>
+              <div class="grid-2">
+                <label>Hospedagem <input type="number" name="lodging" min="0" placeholder="ex: 3000"></label>
+                <label>Alimentação <input type="number" name="food" min="0" placeholder="ex: 1800"></label>
+                <label>Locomoção <input type="number" name="transport" min="0" placeholder="ex: 800"></label>
+                <label>Total <input type="number" name="total" min="0" placeholder="opcional"></label>
+              </div>
+            </fieldset>
+
+            <div class="actions">
+              <button type="submit" class="btn btn--primary">Gerar roteiro</button>
+              <a class="btn" href="index.html">Voltar</a>
+            </div>
+          </form>
+        </div>
+      </section>
+
+      <!-- Resultado -->
+      <section id="result" class="card">
+        <div class="card__body">
+          <h2>Seu resultado aparecerá aqui</h2>
+          <p class="muted">Preencha os campos e clique em <strong>Gerar roteiro</strong>.</p>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Pré-preencher destino via query string
+    const qp = new URLSearchParams(location.search);
+    const dest = qp.get('dest');
+    if(dest) document.getElementById('dest').value = dest;
+
+    // Mock simples de geração
+    document.getElementById('planner').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const fd = new FormData(e.target);
+      const d = Object.fromEntries(fd.entries());
+      const interests = fd.getAll('interests');
+      const nights = Math.max(1, Math.round((new Date(d.end) - new Date(d.start))/86400000));
+
+      document.getElementById('result').innerHTML = `
+        <div class="card__body">
+          <h2>Roteiro para ${d.dest} (${nights} noites)</h2>
+          <p><strong>Interesses:</strong> ${interests.join(', ') || '—'}</p>
+          <ul class="bullets">
+            <li>Bairros-base: Copacabana, Ipanema, Botafogo</li>
+            <li>Hospedagem sugerida: <a href="#">Hotel prático em Copacabana</a></li>
+            <li>Atividades: Pão de Açúcar (manhã), Praia de Ipanema (tarde)</li>
+          </ul>
+        </div>`;
+    });
+  </script>
+</body>
+</html>
