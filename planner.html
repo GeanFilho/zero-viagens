@@ -1,11 +1,103 @@
 <!doctype html>
 <html lang="pt-br">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Planejar viagem — Zero Viagens</title>
-
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Planeje sua viagem | Zero Viagens</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#0b1120;line-height:1.5;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+    main{width:100%;max-width:960px;margin:0 auto}
+    .planner-card{background:#fff;border-radius:28px;padding:clamp(24px,4vw,48px);box-shadow:0 25px 60px rgba(15,23,42,.18);display:grid;gap:clamp(20px,3vw,32px)}
+    header{display:grid;gap:12px;text-align:center}
+    header .tag{display:inline-flex;align-items:center;gap:8px;margin:0 auto;padding:8px 16px;border-radius:999px;background:linear-gradient(120deg,#22d3ee,#6366f1);color:#0f172a;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+    header h1{margin:0;font-size:clamp(26px,5vw,36px);color:#111c40}
+    header p{margin:0;color:#475569;font-size:clamp(15px,2.4vw,17px)}
+    form{display:grid;gap:clamp(18px,3vw,28px)}
+    .form-grid{display:grid;gap:16px}
+    @media (min-width:720px){
+      .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    label{display:grid;gap:8px;font-weight:600;color:#0f172a;font-size:15px}
+    input,select,textarea{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #e2e8f0;background:#f8fafc;font-size:15px;color:#0f172a;transition:border-color .2s ease,box-shadow .2s ease}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.25)}
+    textarea{min-height:110px;resize:vertical}
+    .budget-group{display:grid;gap:12px}
+    .budget-title{font-weight:600;font-size:14px;color:#1e293b;text-transform:uppercase;letter-spacing:.08em}
+    .budget-grid{display:grid;gap:12px}
+    @media (min-width:720px){
+      .budget-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    .budget-field{display:grid;gap:6px;font-weight:600;color:#0f172a;font-size:14px}
+    .submit-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
+    button{padding:14px 28px;border-radius:999px;border:0;background:linear-gradient(120deg,#22d3ee,#6366f1);color:#0f172a;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 18px 35px rgba(99,102,241,.25);transition:transform .2s ease,box-shadow .2s ease}
+    button:hover{transform:translateY(-2px);box-shadow:0 22px 42px rgba(99,102,241,.3)}
+    .note{font-size:14px;color:#475569;text-align:center}
+  </style>
+</head>
+<body>
+  <main>
+    <section class="planner-card">
+      <header>
+        <span class="tag">Planejamento guiado</span>
+        <h1>Monte um roteiro personalizado em minutos</h1>
+        <p>Preencha os detalhes da sua viagem para receber um plano equilibrado de hospedagem, experiências e transporte feito para o seu grupo.</p>
+      </header>
+      <form>
+        <div class="form-grid">
+          <label>Destino principal
+            <input type="text" name="destino" placeholder="Ex: Lisboa, Portugal" required>
+          </label>
+          <label>Data de partida
+            <input type="date" name="partida" required>
+          </label>
+          <label>Data de retorno
+            <input type="date" name="retorno" required>
+          </label>
+          <label>Estilo da viagem
+            <select name="estilo" required>
+              <option value="" disabled selected>Selecione uma opção</option>
+              <option>Relaxamento</option>
+              <option>Aventura</option>
+              <option>Cultura &amp; história</option>
+              <option>Família</option>
+              <option>Negócios</option>
+            </select>
+          </label>
+          <label>Número de viajantes
+            <input type="number" name="viajantes" min="1" max="20" placeholder="Ex: 4" required>
+          </label>
+          <label>Preferências do grupo
+            <input type="text" name="preferencias" placeholder="Ex: museus, gastronomia local, trilhas leves">
+          </label>
+        </div>
+        <div class="budget-group">
+          <span class="budget-title">Distribua seu orçamento estimado</span>
+          <div class="budget-grid">
+            <label class="budget-field">Hospedagem
+              <input type="number" name="orcamento_hospedagem" min="0" step="100" placeholder="R$ 3.000">
+            </label>
+            <label class="budget-field">Experiências
+              <input type="number" name="orcamento_experiencias" min="0" step="100" placeholder="R$ 1.500">
+            </label>
+            <label class="budget-field">Transporte
+              <input type="number" name="orcamento_transporte" min="0" step="100" placeholder="R$ 1.200">
+            </label>
+          </div>
+        </div>
+        <label>Observações adicionais
+          <textarea name="observacoes" placeholder="Conte detalhes importantes como restrições alimentares, horários preferidos ou ocasiões especiais."></textarea>
+        </label>
+        <div class="submit-row">
+          <button type="submit">Gerar meu plano inteligente</button>
+          <p class="note">Você receberá um roteiro inicial no seu e-mail em até 24h com sugestões ajustadas ao perfil informado.</p>
+        </div>
+      </form>
+    </section>
+  </main>
     /* ===== Reset + tokens alinhados à nova identidade ===== */
     *,*::before,*::after{box-sizing:border-box}
     html,body{margin:0;padding:0}
