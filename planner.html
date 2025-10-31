@@ -3,98 +3,453 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Gerar roteiro — Zero Viagens</title>
+  <title>Planejador de viagens — Zero Viagens</title>
   <style>
     *,*::before,*::after{box-sizing:border-box}
-    body{margin:0;font-family:"Inter",system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;background:#f1f5f9;color:#0f172a;min-height:100vh;display:flex;align-items:center;justify-content:center;padding:24px}
-    .card{width:100%;max-width:420px;background:#fff;border-radius:18px;box-shadow:0 24px 60px rgba(15,23,42,.08);padding:32px;display:grid;gap:24px}
-    .card__header{display:grid;gap:4px;text-align:center}
-    .logo{display:flex;flex-direction:column;align-items:center;gap:2px;color:#0f172a;font-weight:700;font-size:20px;line-height:1.2}
-    .logo span{display:block;font-size:15px;font-weight:500;color:#64748b}
-    h1{margin:0;font-size:22px}
+    html,body{margin:0;padding:0}
+    img{max-width:100%;display:block}
+    :root{
+      --bg:#f5f7fb;
+      --surface:#ffffff;
+      --surface-muted:#eef2ff;
+      --ink:#0f172a;
+      --muted:#64748b;
+      --primary:#6366f1;
+      --primary-dark:#4338ca;
+      --accent:#22d3ee;
+      --success:#10b981;
+      --ring:#d7def0;
+      --shadow:0 22px 50px rgba(15,23,42,.08);
+      --radius:18px;
+      --container:1080px;
+      --space:clamp(16px,4vw,40px);
+      --transition:all .25s ease;
+    }
+    body{font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+    a{text-decoration:none;color:inherit}
+    .container{max-width:var(--container);margin:0 auto;padding:0 var(--space)}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:12px 18px;border-radius:999px;border:1px solid transparent;font-weight:600;font-size:15px;cursor:pointer;transition:var(--transition)}
+    .btn svg{width:16px;height:16px}
+    .btn:focus-visible{outline:3px solid rgba(99,102,241,.45);outline-offset:2px}
+    .btn--primary{background:var(--primary);color:#fff;box-shadow:0 14px 30px rgba(99,102,241,.2)}
+    .btn--primary:hover{background:var(--primary-dark)}
+    .btn--ghost{background:transparent;color:#fff;border-color:rgba(255,255,255,.4)}
+    .btn--ghost:hover{background:rgba(255,255,255,.12)}
+    .badge{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(34,211,238,.16);color:#0f172a;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+    body.no-scroll{overflow:hidden}
+
+    /* ===== Header ===== */
+    .header{position:sticky;top:0;z-index:80;background:rgba(245,247,251,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(215,222,240,.6)}
+    .header__inner{height:72px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+    .logo{font-weight:800;font-size:20px;letter-spacing:.04em}
+    .logo__accent{color:var(--accent)}
+    .nav{position:fixed;inset:0 auto auto 0;height:100dvh;width:100%;background:rgba(18,24,38,.92);backdrop-filter:blur(10px);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transform:translateY(-110%);opacity:0;pointer-events:none;transition:var(--transition)}
+    .nav a{color:#fff;font-size:18px;font-weight:600}
+    .nav__cta .btn--primary{background:#fff;color:var(--primary)}
+    .nav--open{transform:translateY(0);opacity:1;pointer-events:auto}
+    .hamburger{border:0;background:transparent;font-size:28px;cursor:pointer;color:var(--ink);display:flex}
+    .hamburger[aria-expanded="true"]{color:var(--primary)}
+    @media(min-width:900px){
+      .nav{position:static;height:auto;width:auto;background:transparent;backdrop-filter:none;flex-direction:row;transform:none;opacity:1;pointer-events:auto}
+      .nav a{color:var(--muted);font-size:15px;font-weight:500}
+      .nav a:hover{color:var(--ink)}
+      .nav__cta .btn--primary{background:var(--primary);color:#fff}
+      .hamburger{display:none}
+    }
+
+    /* ===== Hero ===== */
+    .planner-hero{background:linear-gradient(130deg,#4338ca 0%,#6366f1 45%,#22d3ee 100%);color:#fff;position:relative;overflow:hidden}
+    .planner-hero::after{content:"";position:absolute;inset:auto -15% -40% -15%;height:60%;background:radial-gradient(circle at top,#fff3 0,#fff0 60%);opacity:.6}
+    .hero__inner{display:grid;gap:36px;padding:clamp(64px,12vw,120px) 0}
+    @media(min-width:960px){
+      .hero__inner{grid-template-columns:1.05fr .95fr;align-items:center}
+    }
+    .hero__content{display:grid;gap:18px;position:relative;z-index:1}
+    .hero__content h1{margin:0;font-size:clamp(32px,6vw,56px);line-height:1.1;font-weight:800}
+    .hero__content p{margin:0;font-size:clamp(16px,2.6vw,19px);color:rgba(255,255,255,.86);max-width:520px}
+    .hero__meta{display:grid;gap:12px}
+    .meta-list{display:grid;gap:10px;padding:0;margin:0;list-style:none}
+    .meta-list li{display:flex;gap:10px;align-items:flex-start}
+    .meta-list li::before{content:"";display:inline-block;width:16px;height:16px;margin-top:4px;border-radius:999px;background:#22d3ee}
+
+    /* ===== Planner Card ===== */
+    .planner-card{background:var(--surface);border-radius:calc(var(--radius) * 1.05);padding:28px;box-shadow:var(--shadow);color:var(--ink);display:grid;gap:20px;position:relative;z-index:1}
+    .planner-card header{display:grid;gap:6px}
+    .planner-card header h2{margin:0;font-size:24px}
     form{display:grid;gap:16px}
-    label{display:grid;gap:8px;font-size:14px;font-weight:600;color:#0f172a}
-    input[type="text"],input[type="date"],input[type="number"],select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid #cbd5f5;background:#f8fafc;font-size:15px;color:#0f172a}
-    input:focus,select:focus{outline:none;border-color:#2563eb;box-shadow:0 0 0 3px rgba(37,99,235,.2)}
+    label{display:grid;gap:8px;font-size:14px;font-weight:600;color:var(--ink)}
+    input[type="text"],input[type="date"],input[type="number"],select{width:100%;padding:12px 14px;border-radius:12px;border:1px solid var(--ring);background:var(--surface-muted);font-size:15px;color:var(--ink)}
+    input:focus-visible,select:focus-visible{outline:none;border-color:var(--primary);box-shadow:0 0 0 3px rgba(99,102,241,.25)}
     .inline{display:grid;gap:12px}
-    @media(min-width:400px){.inline{grid-template-columns:repeat(2,minmax(0,1fr))}}
-    fieldset{margin:0;padding:14px;border-radius:14px;border:1px solid #cbd5f5;display:grid;gap:12px}
-    legend{padding:0 6px;font-size:13px;font-weight:600;color:#475569}
+    @media(min-width:540px){
+      .inline--2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    fieldset{margin:0;border-radius:14px;border:1px solid var(--ring);padding:16px;display:grid;gap:14px}
+    legend{padding:0 6px;font-size:13px;font-weight:600;color:var(--muted)}
     .chips{display:flex;flex-wrap:wrap;gap:10px}
-    .chip{position:relative;display:flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:#e0e7ff;color:#1e3a8a;font-weight:500;font-size:14px}
-    .chip input{appearance:none;width:16px;height:16px;border:2px solid #2563eb;border-radius:50%;display:grid;place-items:center}
-    .chip input::after{content:"";width:8px;height:8px;border-radius:50%;background:#2563eb;transform:scale(0);transition:transform .2s ease}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 12px;border-radius:999px;background:rgba(99,102,241,.12);color:var(--primary);font-weight:500;font-size:14px;cursor:pointer;transition:var(--transition)}
+    .chip input{appearance:none;width:16px;height:16px;border:2px solid currentColor;border-radius:50%;display:grid;place-items:center}
+    .chip input::after{content:"";width:8px;height:8px;border-radius:50%;background:currentColor;transform:scale(0);transition:transform .2s ease}
     .chip input:checked::after{transform:scale(1)}
-    .submit-btn{width:100%;padding:14px;border:0;border-radius:999px;background:#2563eb;color:#fff;font-weight:600;font-size:16px;cursor:pointer;transition:background .2s ease}
-    .submit-btn:hover{background:#1d4ed8}
-    .footer{text-align:center;font-size:12px;color:#94a3b8}
+    .chip:hover{background:rgba(99,102,241,.2)}
+    .helper{color:var(--muted);font-size:13px;line-height:1.4}
+    .actions{display:flex;flex-wrap:wrap;gap:12px}
+    .submit-btn{flex:1 1 220px}
+
+    /* ===== Result ===== */
+    .result{padding:clamp(48px,10vw,72px) 0}
+    .result__inner{display:grid;gap:28px}
+    @media(min-width:960px){
+      .result__inner{grid-template-columns:1.05fr .95fr;align-items:start}
+    }
+    .result__card{background:var(--surface);border-radius:calc(var(--radius) * 1.05);box-shadow:var(--shadow);border:1px solid rgba(15,23,42,.05);padding:28px;display:grid;gap:18px}
+    .result__card h2{margin:0;font-size:24px}
+    .result__card p{margin:0;color:var(--muted)}
+    .itinerary{display:grid;gap:18px}
+    .itinerary__day{background:var(--surface-muted);border-radius:16px;padding:18px;display:grid;gap:10px}
+    .itinerary__day strong{font-size:16px}
+    .itinerary__day ul{margin:0;padding-left:20px;display:grid;gap:8px;color:var(--ink)}
+    .summary{display:grid;gap:12px}
+    .summary__item{display:flex;justify-content:space-between;align-items:center;font-weight:600}
+    .summary__item span:last-child{color:var(--primary)}
+    .highlight{background:rgba(16,185,129,.14);border-radius:14px;padding:18px;display:grid;gap:8px}
+    .highlight strong{color:#047857}
+
+    /* ===== Support section ===== */
+    .support{background:var(--surface);padding:clamp(48px,9vw,72px) 0;margin:72px 0 0;border-top-left-radius:36px;border-top-right-radius:36px;box-shadow:0 -18px 45px rgba(15,23,42,.05)}
+    .support__inner{display:grid;gap:28px}
+    @media(min-width:860px){
+      .support__inner{grid-template-columns:1fr 1fr;align-items:center}
+    }
+    .support__inner h2{margin:0;font-size:clamp(28px,4vw,40px)}
+    .support__list{list-style:none;padding:0;margin:0;display:grid;gap:16px}
+    .support__list li{display:flex;gap:14px;align-items:flex-start}
+    .support__list li::before{content:"";display:inline-block;width:18px;height:18px;margin-top:4px;border-radius:50%;background:var(--primary)}
+
+    /* ===== Footer ===== */
+    .footer{border-top:1px solid rgba(215,222,240,.8);padding:36px 0;margin-top:72px;background:#fff}
+    .footer__inner{display:grid;gap:24px}
+    .footer__top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+    .social{display:flex;gap:14px}
+    .social a{width:36px;height:36px;border-radius:50%;background:var(--surface-muted);display:grid;place-items:center;color:var(--primary);transition:var(--transition)}
+    .social a:hover{background:var(--primary);color:#fff}
+    .footer__bottom{color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+    @media(max-width:600px){
+      .footer__bottom{flex-direction:column;align-items:flex-start}
+    }
   </style>
 </head>
 <body>
-  <div class="card">
-    <div class="card__header">
-      <div class="logo">Zero Viagens<span>Seu roteiro de viagem inteligente</span></div>
-      <h1>Gerar roteiro</h1>
+  <header class="header">
+    <div class="container header__inner">
+      <a class="logo" href="index.html">Zero <span class="logo__accent">Viagens</span></a>
+      <nav class="nav" id="nav">
+        <a href="index.html#sobre">Sobre</a>
+        <a href="index.html#destinos">Destinos</a>
+        <a href="index.html#blog">Blog</a>
+        <div class="nav__cta">
+          <a class="btn btn--primary" href="planner.html">Gerar roteiro</a>
+        </div>
+      </nav>
+      <button class="hamburger" id="menuToggle" aria-label="Menu" aria-controls="nav" aria-expanded="false">☰</button>
     </div>
-    <form>
-      <label>
-        Destino
-        <input type="text" value="Rio de Janeiro, RJ" aria-label="Destino" />
-      </label>
-      <div class="inline">
-        <label>
-          Check-in
-          <input type="date" value="2025-09-10" aria-label="Data de check-in" />
-        </label>
-        <label>
-          Check-out
-          <input type="date" value="2025-09-17" aria-label="Data de check-out" />
-        </label>
+  </header>
+
+  <main>
+    <section class="planner-hero">
+      <div class="container hero__inner">
+        <div class="hero__content">
+          <span class="badge">Planejamento inteligente</span>
+          <h1>Monte um roteiro acolhedor para todo o seu grupo</h1>
+          <p>Centralize datas, preferências, acessibilidade e orçamento em um único fluxo. Receba sugestões personalizadas com suporte humano 24/7.</p>
+          <div class="hero__meta">
+            <ul class="meta-list">
+              <li>Adapte atividades conforme o nível de mobilidade e ritmo da viagem.</li>
+              <li>Defina orçamentos separados e receba recomendações dentro do limite.</li>
+              <li>Compartilhe o roteiro com o grupo em segundos.</li>
+            </ul>
+            <div class="helper" style="color:rgba(255,255,255,.75)">Já atendeu mais de <strong>10 mil viajantes</strong> em diferentes contextos, incluindo viagens corporativas e educacionais.</div>
+          </div>
+        </div>
+
+        <section class="planner-card" aria-labelledby="plannerTitle">
+          <header>
+            <span class="badge" style="background:rgba(99,102,241,.12);color:var(--primary)">Etapa única</span>
+            <h2 id="plannerTitle">Gerar roteiro personalizado</h2>
+            <p class="helper">Preencha os campos para receber uma prévia inteligente com sugestões de hospedagem e atividades.</p>
+          </header>
+          <form id="plannerForm">
+            <label>
+              Destino
+              <input type="text" id="destino" name="destino" placeholder="Ex: Rio de Janeiro, RJ" required />
+            </label>
+            <div class="inline inline--2">
+              <label>
+                Check-in
+                <input type="date" id="checkin" name="checkin" required />
+              </label>
+              <label>
+                Check-out
+                <input type="date" id="checkout" name="checkout" required />
+              </label>
+            </div>
+            <div class="inline inline--2">
+              <label>
+                Pessoas
+                <input type="number" id="pessoas" name="pessoas" min="1" value="2" required />
+              </label>
+              <label>
+                Perfil do grupo
+                <select id="perfil" name="perfil">
+                  <option value="familia">Família</option>
+                  <option value="amigos">Amigos</option>
+                  <option value="casal">Casal</option>
+                  <option value="corporativo">Corporativo</option>
+                </select>
+              </label>
+            </div>
+            <fieldset>
+              <legend>Interesses principais</legend>
+              <div class="chips">
+                <label class="chip"><input type="checkbox" name="interesses" value="praias"> Praias</label>
+                <label class="chip"><input type="checkbox" name="interesses" value="gastronomia"> Gastronomia</label>
+                <label class="chip"><input type="checkbox" name="interesses" value="cultura"> Cultura</label>
+                <label class="chip"><input type="checkbox" name="interesses" value="aventura"> Aventura</label>
+                <label class="chip"><input type="checkbox" name="interesses" value="natureza"> Natureza</label>
+                <label class="chip"><input type="checkbox" name="interesses" value="acessibilidade"> Acessibilidade total</label>
+              </div>
+            </fieldset>
+            <fieldset>
+              <legend>Orçamento (R$)</legend>
+              <div class="inline inline--2">
+                <label>
+                  Hospedagem
+                  <input type="number" id="orcamentoHosp" name="orcamentoHosp" min="0" placeholder="ex: 3500" />
+                </label>
+                <label>
+                  Alimentação
+                  <input type="number" id="orcamentoAlim" name="orcamentoAlim" min="0" placeholder="ex: 1800" />
+                </label>
+                <label>
+                  Transporte
+                  <input type="number" id="orcamentoTransp" name="orcamentoTransp" min="0" placeholder="ex: 900" />
+                </label>
+                <label>
+                  Experiências
+                  <input type="number" id="orcamentoExp" name="orcamentoExp" min="0" placeholder="ex: 1200" />
+                </label>
+              </div>
+            </fieldset>
+            <div class="actions">
+              <button type="submit" class="btn btn--primary submit-btn">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+                Gerar roteiro inteligente
+              </button>
+              <a class="btn btn--ghost" href="index.html" style="color:rgba(255,255,255,.9);border-color:rgba(255,255,255,.3)">Voltar para home</a>
+            </div>
+          </form>
+        </section>
       </div>
-      <label>
-        Pessoas
-        <input type="number" min="1" value="2" aria-label="Quantidade de pessoas" />
-      </label>
-      <fieldset>
-        <legend>Interesses</legend>
-        <div class="chips">
-          <label class="chip">
-            <input type="checkbox" checked aria-label="Praia" /> Praia
-          </label>
-          <label class="chip">
-            <input type="checkbox" aria-label="Futebol" /> Futebol
-          </label>
-          <label class="chip">
-            <input type="checkbox" aria-label="Culinária regional" /> Culinária regional
-          </label>
+    </section>
+
+    <section class="result" aria-live="polite">
+      <div class="container result__inner">
+        <article class="result__card" id="resultado">
+          <h2>Seu roteiro aparecerá aqui</h2>
+          <p>Informe os detalhes no formulário para visualizar recomendações instantâneas, orçamento estimado e ideias de atividades inclusivas.</p>
+        </article>
+        <aside class="result__card" style="background:var(--surface-muted);border:none">
+          <div class="highlight">
+            <strong>Curadoria humana com tecnologia</strong>
+            <span>Nosso time valida cada sugestão com especialistas locais e checa acessibilidade, transporte e ritmo do grupo antes de enviar o roteiro final.</span>
+          </div>
+          <div class="summary">
+            <div class="summary__item"><span>Atendimento humano</span><span>24h por dia</span></div>
+            <div class="summary__item"><span>Economia média</span><span>15% em pacotes</span></div>
+            <div class="summary__item"><span>Clientes satisfeitos</span><span>98%</span></div>
+          </div>
+          <div class="helper">Após gerar a prévia, um consultor Zero Viagens envia o roteiro completo com reservas sugeridas, dicas de mobilidade e opções de personalização.</div>
+        </aside>
+      </div>
+    </section>
+
+    <section class="support">
+      <div class="container support__inner">
+        <div>
+          <h2>Suporte completo até o embarque</h2>
+          <p class="helper" style="font-size:15px">Acompanhamos cada etapa com comunicação transparente, materiais acessíveis e atenção às necessidades individuais.</p>
+          <ul class="support__list">
+            <li>Checklist de acessibilidade e inclusão compartilhado com todos os parceiros.</li>
+            <li>Canal exclusivo no WhatsApp e e-mail para alterações de última hora.</li>
+            <li>Seguro viagem com cobertura personalizada e suporte multilíngue.</li>
+          </ul>
         </div>
-      </fieldset>
-      <fieldset>
-        <legend>Orçamento (R$)</legend>
-        <div class="inline">
-          <label>
-            Hospedagem
-            <input type="number" value="3000" aria-label="Orçamento hospedagem" />
-          </label>
-          <label>
-            Alimentação
-            <input type="number" value="1800" aria-label="Orçamento alimentação" />
-          </label>
+        <div class="planner-card" style="box-shadow:none;border:1px solid rgba(15,23,42,.08)">
+          <header>
+            <span class="badge" style="background:rgba(16,185,129,.16);color:#047857">Próximo passo</span>
+            <h2>Pronto para reservar?</h2>
+            <p class="helper">Finalize o roteiro com um especialista Zero Viagens para garantir cotações exclusivas, bloqueio de tarifas e acompanhamento integral.</p>
+          </header>
+          <a class="btn btn--primary" href="mailto:contato@zeroviagens.com">Falar com consultor</a>
+          <a class="btn" href="index.html#destinos" style="border-color:var(--ring);color:var(--primary)">Explorar destinos sugeridos</a>
         </div>
-        <div class="inline">
-          <label>
-            Locomoção
-            <input type="number" value="800" aria-label="Orçamento locomoção" />
-          </label>
-          <label>
-            Total
-            <input type="number" value="6000" aria-label="Orçamento total" />
-          </label>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <div class="footer__top">
+        <a class="logo" href="index.html">Zero <span class="logo__accent">Viagens</span></a>
+        <div class="social" aria-label="Redes sociais">
+          <a href="https://instagram.com" aria-label="Instagram">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M9 9h6v6H9z"/><circle cx="16.5" cy="7.5" r=".8"/></svg>
+          </a>
+          <a href="https://linkedin.com" aria-label="LinkedIn">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 8a6 6 0 0 1 6 6v6h-4v-6a2 2 0 0 0-2-2 2 2 0 0 0-2 2v6h-4v-6a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="11"/><circle cx="4" cy="4" r="2"/></svg>
+          </a>
+          <a href="mailto:contato@zeroviagens.com" aria-label="Email">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m4 4 8 8 8-8"/><path d="M2 6v12a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V6"/></svg>
+          </a>
         </div>
-      </fieldset>
-      <button type="submit" class="submit-btn">Gerar roteiro</button>
-    </form>
-    <p class="footer">© Zero Viagens · Privacidade</p>
-  </div>
+      </div>
+      <div class="footer__bottom">
+        <span>© <span id="year"></span> Zero Viagens. Todos os direitos reservados.</span>
+        <a href="planner.html" class="btn btn--primary">Gerar novo roteiro</a>
+      </div>
+    </div>
+  </footer>
+
+  <script>
+    const toggleButton = document.getElementById('menuToggle');
+    const nav = document.getElementById('nav');
+    const body = document.body;
+
+    const toggleMenu = () => {
+      const expanded = toggleButton.getAttribute('aria-expanded') === 'true';
+      toggleButton.setAttribute('aria-expanded', String(!expanded));
+      nav.classList.toggle('nav--open');
+      body.classList.toggle('no-scroll');
+      if (!expanded) {
+        const firstLink = nav.querySelector('a');
+        firstLink?.focus();
+      } else {
+        toggleButton.focus();
+      }
+    };
+
+    toggleButton.addEventListener('click', toggleMenu);
+    nav.addEventListener('click', (event) => {
+      if (event.target.tagName === 'A' && toggleButton.getAttribute('aria-expanded') === 'true') {
+        toggleMenu();
+      }
+    });
+
+    document.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape' && toggleButton.getAttribute('aria-expanded') === 'true') {
+        toggleMenu();
+      }
+    });
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    const form = document.getElementById('plannerForm');
+    const resultContainer = document.getElementById('resultado');
+
+    const formatter = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' });
+
+    const buildBudgetSummary = (values) => {
+      const total = values.reduce((sum, value) => sum + (Number(value) || 0), 0);
+      return {
+        total,
+        formatted: formatter.format(total)
+      };
+    };
+
+    form.addEventListener('submit', (event) => {
+      event.preventDefault();
+      const formData = new FormData(form);
+      const destino = formData.get('destino').trim();
+      const checkin = formData.get('checkin');
+      const checkout = formData.get('checkout');
+      const pessoas = Number(formData.get('pessoas')) || 1;
+      const perfil = formData.get('perfil');
+      const interesses = formData.getAll('interesses');
+      const orcamentos = [formData.get('orcamentoHosp'), formData.get('orcamentoAlim'), formData.get('orcamentoTransp'), formData.get('orcamentoExp')];
+      const budget = buildBudgetSummary(orcamentos);
+
+      const startDate = checkin ? new Date(checkin) : null;
+      const endDate = checkout ? new Date(checkout) : null;
+      const nights = startDate && endDate ? Math.max(1, Math.round((endDate - startDate) / 86400000)) : 1;
+
+      const perfilLabels = {
+        familia: 'famílias multigeracionais',
+        amigos: 'grupos de amigos',
+        casal: 'viagens românticas',
+        corporativo: 'equipes corporativas'
+      };
+
+      const interesseList = interesses.length ? interesses.map((item) => item.charAt(0).toUpperCase() + item.slice(1)).join(', ') : 'Experiências gerais';
+
+      const dias = [
+        {
+          titulo: 'Dia 1 · Chegada acolhedora',
+          pontos: [
+            'Check-in assistido com orientações de acessibilidade e opções de mobilidade local.',
+            `Passeio de reconhecimento pelo centro de ${destino.split(',')[0] || destino}, com guia bilíngue.`,
+            'Jantar de boas-vindas em restaurante com cardápio inclusivo.'
+          ]
+        },
+        {
+          titulo: 'Dia 2 · Explorar com conforto',
+          pontos: [
+            'Atividade principal adaptada aos interesses selecionados, com alternativas de ritmo.',
+            'Intervalos planejados com sugestões de cafés acessíveis e espaços de descanso.',
+            'Experiência cultural com intérprete e recursos táteis/visuais quando necessário.'
+          ]
+        },
+        {
+          titulo: 'Dia 3 · Memórias compartilhadas',
+          pontos: [
+            'Manhã livre com recomendações personalizadas para cada perfil do grupo.',
+            'Sessão fotográfica opcional em ponto turístico acessível.',
+            'Checklist final e acompanhamento para retorno seguro.'
+          ]
+        }
+      ];
+
+      resultContainer.innerHTML = `
+        <div class="badge" style="justify-self:flex-start">Prévia gerada</div>
+        <h2>Roteiro para ${destino || 'seu destino'} · ${nights} noites</h2>
+        <p>Planejado para ${pessoas} ${pessoas === 1 ? 'viajante' : 'viajantes'} com foco em ${perfilLabels[perfil]}.</p>
+        <p><strong>Interesses prioritários:</strong> ${interesseList}.</p>
+        <div class="summary">
+          <div class="summary__item"><span>Orçamento estimado</span><span>${budget.formatted}</span></div>
+          <div class="summary__item"><span>Check-in</span><span>${checkin || 'a definir'}</span></div>
+          <div class="summary__item"><span>Check-out</span><span>${checkout || 'a definir'}</span></div>
+        </div>
+        <div class="itinerary">
+          ${dias.map((dia) => `
+            <section class="itinerary__day">
+              <strong>${dia.titulo}</strong>
+              <ul>${dia.pontos.map((ponto) => `<li>${ponto}</li>`).join('')}</ul>
+            </section>
+          `).join('')}
+        </div>
+        <div class="highlight">
+          <strong>Próximos passos</strong>
+          <span>Um consultor Zero Viagens entrará em contato em até 2 horas úteis para validar preferências especiais, confirmar reservas e enviar versões alternativas do roteiro.</span>
+        </div>
+      `;
+      resultContainer.setAttribute('tabindex', '-1');
+      resultContainer.focus({ preventScroll: false });
+    });
+
+    const params = new URLSearchParams(window.location.search);
+    const defaultDest = params.get('dest') || '';
+    if(defaultDest){
+      document.getElementById('destino').value = defaultDest;
+    }
+  </script>
 </body>
 </html>
