@@ -3,11 +3,132 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gerar roteiro | Zero Viagens</title>
   <title>Planeje sua viagem | Zero Viagens</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
+    :root {
+      color-scheme: light;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      background: #f1f5f9;
+      color: #0f172a;
+      padding: 24px;
+    }
+
+    .planner-card {
+      width: min(100%, 380px);
+      background: #fff;
+      border-radius: 24px;
+      padding: 32px;
+      box-shadow: 0 24px 48px rgba(15, 23, 42, 0.12);
+      display: grid;
+      gap: 24px;
+    }
+
+    .brand {
+      display: grid;
+      gap: 4px;
+      text-align: center;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: 24px;
+      font-weight: 700;
+    }
+
+    .brand p {
+      margin: 0;
+      color: #475569;
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .form-title {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    form {
+      display: grid;
+      gap: 16px;
+    }
+
+    label {
+      display: grid;
+      gap: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      color: #1e293b;
+    }
+
+    input[type="text"],
+    input[type="date"],
+    input[type="number"] {
+      width: 100%;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      background: #f8fafc;
+      padding: 12px 14px;
+      font-size: 15px;
+      color: #0f172a;
+    }
+
+    input:focus {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .checkbox {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 500;
+      font-size: 14px;
+      color: #1e293b;
+    }
+
+    .budget-grid {
+      display: grid;
+      gap: 12px;
+    }
+
+    button {
+      width: 100%;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #fff;
+      background: linear-gradient(135deg, #2563eb, #1d4ed8);
+      cursor: pointer;
+    }
+
+    button:hover {
+      background: linear-gradient(135deg, #1d4ed8, #1e40af);
     *,*::before,*::after{box-sizing:border-box}
     body{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#0b1120;line-height:1.5;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
     main{width:100%;max-width:960px;margin:0 auto}
@@ -234,243 +355,71 @@
   </style>
 </head>
 <body>
-  <header class="header">
-    <div class="container header__inner">
-      <a class="logo" href="index.html">Zero <span class="logo__accent">Viagens</span></a>
-      <nav class="nav" id="nav">
-        <a href="index.html#sobre">Sobre</a>
-        <a href="index.html#destinos">Destinos</a>
-        <a href="index.html#blog">Blog</a>
-        <div class="nav__cta">
-          <a class="btn btn--primary" href="planner.html">Planejar viagem</a>
-        </div>
-      </nav>
-      <button class="hamburger" aria-label="Menu" aria-controls="nav" aria-expanded="false" id="menuToggle">☰</button>
+  <main class="planner-card">
+    <div class="brand">
+      <h1>Zero Viagens</h1>
+      <p>Seu roteiro de viagem inteligente</p>
     </div>
-  </header>
 
-  <main>
-    <section class="planner-hero">
-      <div class="container hero__inner">
-        <div class="hero__content">
-          <span class="tag">Montagem assistida</span>
-          <h1>Construa um roteiro acolhedor para cada perfil viajante</h1>
-          <p>Combine acessibilidade, ritmo personalizado e curadoria local em poucos cliques. Nosso planner considera datas, orçamento, interesses e envia um resumo pronto para compartilhar.</p>
-          <ul class="hero__bullets">
-            <li>Sugestões atualizadas com base em experiências reais</li>
-            <li>Flexibilidade para múltiplos orçamentos e estilos de viagem</li>
-            <li>Resultados pensados para famílias, grupos e viajantes solos</li>
-          </ul>
-          <div class="actions">
-            <a class="btn btn--primary" href="#gerar-roteiro">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14m7-7H5"/></svg>
-              Gerar roteiro agora
-            </a>
-            <a class="btn btn--ghost" href="#result">Ver exemplo</a>
-          </div>
+    <h2 class="form-title">Gerar roteiro</h2>
+
+    <form>
+      <label>
+        Destino
+        <input type="text" name="destino" value="Rio de Janeiro, RJ">
+      </label>
+      <label>
+        Check-in
+        <input type="date" name="checkin" value="2025-09-10">
+      </label>
+      <label>
+        Check-out
+        <input type="date" name="checkout" value="2025-09-17">
+      </label>
+      <label>
+        Pessoas
+        <input type="number" name="pessoas" value="2" min="1">
+      </label>
+      <div>
+        <span style="display:block;font-size:14px;font-weight:600;color:#1e293b;margin-bottom:8px;">Interesses</span>
+        <div class="checkbox-group">
+          <label class="checkbox">
+            <input type="checkbox" name="interesses" checked>
+            Praia
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="interesses">
+            Futebol
+          </label>
+          <label class="checkbox">
+            <input type="checkbox" name="interesses" checked>
+            Culinária regional
+          </label>
         </div>
-        <aside class="hero__card" aria-label="Destaques do planner">
-          <h2>Pronto para adaptar cada jornada</h2>
-          <p>Inteligência humana + tecnologia para garantir que todo mundo se sinta incluído.</p>
-          <div class="hero__stats">
-            <div class="hero__stat">
-              <strong>25+</strong>
-              <span>roteiros colaborativos com guias locais por semana</span>
-            </div>
-            <div class="hero__stat">
-              <strong>92%</strong>
-              <span>de clientes que economizam tempo no planejamento</span>
-            </div>
-            <div class="hero__stat">
-              <strong>4,9/5</strong>
-              <span>média de satisfação entre viajantes diversos</span>
-            </div>
-          </div>
-        </aside>
       </div>
-    </section>
-
-    <section class="planner section" id="gerar-roteiro">
-      <div class="container planner__grid">
-        <section class="panel" aria-labelledby="planner-title">
-          <div class="panel__header">
-            <h2 id="planner-title">Monte seu roteiro personalizado</h2>
-            <p>Informe destino, período, interesses e orçamento para gerar um esboço instantâneo que pode ser refinado com nossa equipe.</p>
-          </div>
-          <div class="panel__body">
-            <form id="planner">
-              <label>Destino
-                <input id="dest" name="dest" placeholder="Ex.: Rio de Janeiro, RJ" required />
-              </label>
-
-              <div class="grid-2">
-                <label>Check-in
-                  <input type="date" name="start" required />
-                </label>
-                <label>Check-out
-                  <input type="date" name="end" required />
-                </label>
-              </div>
-
-              <label>Pessoas viajando
-                <input type="number" name="people" min="1" value="2" required />
-              </label>
-
-              <fieldset>
-                <legend>Interesses principais</legend>
-                <div class="chip-group">
-                  <label class="chip"><input type="checkbox" name="interests" value="praia"> Praia</label>
-                  <label class="chip"><input type="checkbox" name="interests" value="futebol"> Futebol</label>
-                  <label class="chip"><input type="checkbox" name="interests" value="culinaria_regional"> Culinária regional</label>
-                  <label class="chip"><input type="checkbox" name="interests" value="vida_noturna"> Vida noturna</label>
-                  <label class="chip"><input type="checkbox" name="interests" value="historia_cultura"> História e cultura</label>
-                </div>
-              </fieldset>
-
-              <fieldset>
-                <legend>Orçamento estimado (R$)</legend>
-                <div class="grid-2">
-                  <label>Hospedagem
-                    <input type="number" name="lodging" min="0" placeholder="ex.: 3000" />
-                  </label>
-                  <label>Alimentação
-                    <input type="number" name="food" min="0" placeholder="ex.: 1800" />
-                  </label>
-                  <label>Locomoção
-                    <input type="number" name="transport" min="0" placeholder="ex.: 800" />
-                  </label>
-                  <label>Total
-                    <input type="number" name="total" min="0" placeholder="opcional" />
-                  </label>
-                </div>
-              </fieldset>
-
-              <div class="actions">
-                <button type="submit" class="btn btn--primary">Gerar roteiro</button>
-                <a class="btn btn--ghost" href="index.html">Voltar para a home</a>
-              </div>
-            </form>
-          </div>
-        </section>
-
-        <section id="result" class="panel" aria-live="polite" aria-atomic="true">
-          <div class="panel__header">
-            <h2>Seu resultado aparecerá aqui</h2>
-            <p class="muted">Preencha os campos ao lado e receba um resumo com atividades, ritmo sugerido e dicas de acessibilidade.</p>
-          </div>
-          <div class="panel__body result-placeholder">
-            <strong>Pronto para começar?</strong>
-            <span>Compartilhe o roteiro com seu grupo e refine com nossos consultores.</span>
-          </div>
-        </section>
+      <div>
+        <span style="display:block;font-size:14px;font-weight:600;color:#1e293b;margin-bottom:8px;">Orçamento (R$)</span>
+        <div class="budget-grid">
+          <label>
+            Hospedagem
+            <input type="number" name="orcamento_hospedagem" value="3000" min="0">
+          </label>
+          <label>
+            Alimentação
+            <input type="number" name="orcamento_alimentacao" value="1800" min="0">
+          </label>
+          <label>
+            Locomoção
+            <input type="number" name="orcamento_locomocao" value="800" min="0">
+          </label>
+          <label>
+            Total
+            <input type="number" name="orcamento_total" value="6000" min="0">
+          </label>
+        </div>
       </div>
-    </section>
+      <button type="submit">Gerar roteiro</button>
+    </form>
   </main>
-
-  <footer class="footer">
-    <div class="container footer__inner">
-      <div class="footer__top">
-        <a class="logo" href="index.html">Zero <span class="logo__accent">Viagens</span></a>
-        <div class="social" aria-label="Nossas redes sociais">
-          <a href="https://instagram.com" aria-label="Instagram">IG</a>
-          <a href="https://facebook.com" aria-label="Facebook">FB</a>
-          <a href="https://linkedin.com" aria-label="LinkedIn">IN</a>
-        </div>
-      </div>
-      <div class="footer__bottom">
-        <span>© <span id="year"></span> Zero Viagens. Todos os direitos reservados.</span>
-        <a href="planner.html" class="btn btn--primary">Planejar outra viagem</a>
-      </div>
-    </div>
-  </footer>
-
-  <script>
-    const toggleButton = document.getElementById('menuToggle');
-    const nav = document.getElementById('nav');
-    const body = document.body;
-
-    const toggleMenu = () => {
-      const expanded = toggleButton.getAttribute('aria-expanded') === 'true';
-      toggleButton.setAttribute('aria-expanded', String(!expanded));
-      nav.classList.toggle('nav--open');
-      body.classList.toggle('no-scroll');
-      if (!expanded) {
-        const firstLink = nav.querySelector('a');
-        firstLink?.focus();
-      } else {
-        toggleButton.focus();
-      }
-    };
-
-    toggleButton.addEventListener('click', toggleMenu);
-    nav.addEventListener('click', (event) => {
-      if (event.target.tagName === 'A' && toggleButton.getAttribute('aria-expanded') === 'true') {
-        toggleMenu();
-      }
-    });
-
-    document.addEventListener('keydown', (event) => {
-      if (event.key === 'Escape' && toggleButton.getAttribute('aria-expanded') === 'true') {
-        toggleMenu();
-      }
-    });
-
-    document.getElementById('year').textContent = new Date().getFullYear();
-
-    // Pré-preencher destino via query string
-    const qp = new URLSearchParams(location.search);
-    const dest = qp.get('dest');
-    if (dest) document.getElementById('dest').value = dest;
-
-    // Mock simples de geração
-    document.getElementById('planner').addEventListener('submit', (event) => {
-      event.preventDefault();
-      const formData = new FormData(event.target);
-      const data = Object.fromEntries(formData.entries());
-      const interests = formData.getAll('interests');
-      const nights = Math.max(1, Math.round((new Date(data.end) - new Date(data.start)) / 86400000));
-      const people = Number(data.people) || 1;
-
-      const interestLabels = {
-        praia: 'Praia',
-        futebol: 'Futebol',
-        culinaria_regional: 'Culinária regional',
-        vida_noturna: 'Vida noturna',
-        historia_cultura: 'História e cultura'
-      };
-      const interestLabel = interests.length
-        ? interests.map((value) => interestLabels[value] ?? value).join(', ')
-        : 'Personalize com seus interesses favoritos';
-
-      const budgetLabels = {
-        lodging: 'Hospedagem',
-        food: 'Alimentação',
-        transport: 'Locomoção',
-        total: 'Total estimado'
-      };
-      const budgetLines = ['lodging','food','transport','total']
-        .map((key) => data[key] ? `${budgetLabels[key]}: R$ ${Number(data[key]).toLocaleString('pt-BR')}` : null)
-        .filter(Boolean)
-        .join(' · ');
-
-      document.getElementById('result').innerHTML = `
-        <div class="panel__header">
-          <h2>Roteiro para ${data.dest} (${nights} ${nights === 1 ? 'noite' : 'noites'})</h2>
-          <p>${people} ${people === 1 ? 'viajante' : 'viajantes'} · ${interestLabel}</p>
-        </div>
-        <div class="panel__body itinerary">
-          <div class="itinerary__header">
-            <strong>Resumo de prioridades</strong>
-            <span>${budgetLines || 'Defina um orçamento para receber sugestões de hospedagem e experiências compatíveis.'}</span>
-          </div>
-          <ul class="bullets">
-            <li>Bairros-base sugeridos: Copacabana, Ipanema e Botafogo para fácil locomoção.</li>
-            <li>Atividades inclusivas: passeio guiado no Pão de Açúcar com acessibilidade + tarde livre na Praia de Ipanema.</li>
-            <li>Extras personalizados: aula de culinária regional e tour histórico adaptado no centro.</li>
-          </ul>
-          <p class="muted">Dica: salve este roteiro e compartilhe com o grupo. Nossa equipe pode ajustar horários, acessibilidade e reservas especiais.</p>
-        </div>`;
-    });
-  </script>
 </body>
 </html>
