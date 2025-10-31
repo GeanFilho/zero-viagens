@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Gerar roteiro | Zero Viagens</title>
+  <title>Planeje sua viagem | Zero Viagens</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -128,6 +129,228 @@
 
     button:hover {
       background: linear-gradient(135deg, #1d4ed8, #1e40af);
+    *,*::before,*::after{box-sizing:border-box}
+    body{margin:0;font-family:"Inter",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;background:#0f172a;color:#0b1120;line-height:1.5;display:flex;min-height:100vh;align-items:center;justify-content:center;padding:24px}
+    main{width:100%;max-width:960px;margin:0 auto}
+    .planner-card{background:#fff;border-radius:28px;padding:clamp(24px,4vw,48px);box-shadow:0 25px 60px rgba(15,23,42,.18);display:grid;gap:clamp(20px,3vw,32px)}
+    header{display:grid;gap:12px;text-align:center}
+    header .tag{display:inline-flex;align-items:center;gap:8px;margin:0 auto;padding:8px 16px;border-radius:999px;background:linear-gradient(120deg,#22d3ee,#6366f1);color:#0f172a;font-weight:600;font-size:13px;text-transform:uppercase;letter-spacing:.08em}
+    header h1{margin:0;font-size:clamp(26px,5vw,36px);color:#111c40}
+    header p{margin:0;color:#475569;font-size:clamp(15px,2.4vw,17px)}
+    form{display:grid;gap:clamp(18px,3vw,28px)}
+    .form-grid{display:grid;gap:16px}
+    @media (min-width:720px){
+      .form-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+    label{display:grid;gap:8px;font-weight:600;color:#0f172a;font-size:15px}
+    input,select,textarea{width:100%;padding:14px 16px;border-radius:14px;border:1px solid #e2e8f0;background:#f8fafc;font-size:15px;color:#0f172a;transition:border-color .2s ease,box-shadow .2s ease}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:#6366f1;box-shadow:0 0 0 3px rgba(99,102,241,.25)}
+    textarea{min-height:110px;resize:vertical}
+    .budget-group{display:grid;gap:12px}
+    .budget-title{font-weight:600;font-size:14px;color:#1e293b;text-transform:uppercase;letter-spacing:.08em}
+    .budget-grid{display:grid;gap:12px}
+    @media (min-width:720px){
+      .budget-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+    }
+    .budget-field{display:grid;gap:6px;font-weight:600;color:#0f172a;font-size:14px}
+    .submit-row{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:center}
+    button{padding:14px 28px;border-radius:999px;border:0;background:linear-gradient(120deg,#22d3ee,#6366f1);color:#0f172a;font-weight:700;font-size:16px;cursor:pointer;box-shadow:0 18px 35px rgba(99,102,241,.25);transition:transform .2s ease,box-shadow .2s ease}
+    button:hover{transform:translateY(-2px);box-shadow:0 22px 42px rgba(99,102,241,.3)}
+    .note{font-size:14px;color:#475569;text-align:center}
+  </style>
+</head>
+<body>
+  <main>
+    <section class="planner-card">
+      <header>
+        <span class="tag">Planejamento guiado</span>
+        <h1>Monte um roteiro personalizado em minutos</h1>
+        <p>Preencha os detalhes da sua viagem para receber um plano equilibrado de hospedagem, experiências e transporte feito para o seu grupo.</p>
+      </header>
+      <form>
+        <div class="form-grid">
+          <label>Destino principal
+            <input type="text" name="destino" placeholder="Ex: Lisboa, Portugal" required>
+          </label>
+          <label>Data de partida
+            <input type="date" name="partida" required>
+          </label>
+          <label>Data de retorno
+            <input type="date" name="retorno" required>
+          </label>
+          <label>Estilo da viagem
+            <select name="estilo" required>
+              <option value="" disabled selected>Selecione uma opção</option>
+              <option>Relaxamento</option>
+              <option>Aventura</option>
+              <option>Cultura &amp; história</option>
+              <option>Família</option>
+              <option>Negócios</option>
+            </select>
+          </label>
+          <label>Número de viajantes
+            <input type="number" name="viajantes" min="1" max="20" placeholder="Ex: 4" required>
+          </label>
+          <label>Preferências do grupo
+            <input type="text" name="preferencias" placeholder="Ex: museus, gastronomia local, trilhas leves">
+          </label>
+        </div>
+        <div class="budget-group">
+          <span class="budget-title">Distribua seu orçamento estimado</span>
+          <div class="budget-grid">
+            <label class="budget-field">Hospedagem
+              <input type="number" name="orcamento_hospedagem" min="0" step="100" placeholder="R$ 3.000">
+            </label>
+            <label class="budget-field">Experiências
+              <input type="number" name="orcamento_experiencias" min="0" step="100" placeholder="R$ 1.500">
+            </label>
+            <label class="budget-field">Transporte
+              <input type="number" name="orcamento_transporte" min="0" step="100" placeholder="R$ 1.200">
+            </label>
+          </div>
+        </div>
+        <label>Observações adicionais
+          <textarea name="observacoes" placeholder="Conte detalhes importantes como restrições alimentares, horários preferidos ou ocasiões especiais."></textarea>
+        </label>
+        <div class="submit-row">
+          <button type="submit">Gerar meu plano inteligente</button>
+          <p class="note">Você receberá um roteiro inicial no seu e-mail em até 24h com sugestões ajustadas ao perfil informado.</p>
+        </div>
+      </form>
+    </section>
+  </main>
+    /* ===== Reset + tokens alinhados à nova identidade ===== */
+    *,*::before,*::after{box-sizing:border-box}
+    html,body{margin:0;padding:0}
+    img{max-width:100%;display:block}
+    :root{
+      --bg:#f5f7fb;
+      --surface:#ffffff;
+      --surface-muted:#eef2ff;
+      --ink:#121826;
+      --muted:#64718b;
+      --primary:#6366f1;
+      --primary-dark:#4338ca;
+      --accent:#f97316;
+      --ring:#d7def0;
+      --shadow:0 18px 45px rgba(15,23,42,.08);
+      --radius:18px;
+      --container:1120px;
+      --space:clamp(16px,3vw,36px);
+      --transition:all .25s ease;
+      --gradient:linear-gradient(135deg,#4338ca 0%,#6366f1 45%,#22d3ee 100%);
+    }
+    body{font-family:"Inter",system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
+    a{text-decoration:none;color:inherit}
+
+    /* ===== Utilitários ===== */
+    .container{max-width:var(--container);margin:0 auto;padding:0 var(--space)}
+    .section{padding:clamp(48px,8vw,88px) 0}
+    .tag{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:rgba(34,211,238,.18);color:#0f172a;font-size:13px;font-weight:600;text-transform:uppercase;letter-spacing:.04em}
+    .btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;font-weight:600;padding:12px 18px;border-radius:999px;border:1px solid transparent;cursor:pointer;transition:var(--transition);font-size:15px;line-height:1}
+    .btn svg{width:16px;height:16px}
+    .btn:focus-visible{outline:3px solid rgba(99,102,241,.45);outline-offset:2px}
+    .btn--primary{background:var(--primary);color:#fff;box-shadow:0 14px 30px rgba(99,102,241,.25)}
+    .btn--primary:hover{background:var(--primary-dark)}
+    .btn--ghost{background:rgba(99,102,241,.1);color:var(--primary);border-color:rgba(99,102,241,.2)}
+    .btn--ghost:hover{background:rgba(99,102,241,.18)}
+    body.no-scroll{overflow:hidden}
+
+    /* ===== Header ===== */
+    .header{position:sticky;top:0;z-index:100;background:rgba(245,247,251,.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(215,222,240,.6)}
+    .header__inner{height:72px;display:flex;justify-content:space-between;align-items:center;gap:16px}
+    .logo{font-weight:800;font-size:20px;letter-spacing:.04em}
+    .logo__accent{color:var(--accent)}
+    .nav{position:fixed;inset:0 auto auto 0;height:100dvh;width:100%;background:rgba(18,24,38,.92);backdrop-filter:blur(10px);display:flex;flex-direction:column;justify-content:center;align-items:center;gap:26px;transform:translateY(-110%);opacity:0;pointer-events:none;transition:var(--transition)}
+    .nav a{color:#fff;font-size:18px;font-weight:600}
+    .nav__cta .btn--primary{background:#fff;color:var(--primary)}
+    .nav--open{transform:translateY(0);opacity:1;pointer-events:auto}
+    .hamburger{border:0;background:transparent;font-size:28px;cursor:pointer;color:var(--ink);display:flex}
+    .hamburger[aria-expanded="true"]{color:var(--primary)}
+    @media (min-width:900px){
+      .nav{position:static;height:auto;width:auto;background:transparent;backdrop-filter:none;flex-direction:row;transform:none;opacity:1;pointer-events:auto}
+      .nav a{color:var(--muted);font-size:15px;font-weight:500}
+      .nav a:hover{color:var(--ink)}
+      .nav__cta .btn--primary{background:var(--primary);color:#fff}
+      .hamburger{display:none}
+    }
+
+    /* ===== Hero ===== */
+    .planner-hero{position:relative;background:var(--gradient);color:#fff;overflow:hidden}
+    .planner-hero::after{content:"";position:absolute;inset:auto -20% -40% -20%;height:60%;background:radial-gradient(circle at 50% 0%,rgba(255,255,255,.35),rgba(67,56,202,0));pointer-events:none}
+    .hero__inner{display:grid;gap:32px;align-items:center}
+    .hero__content{position:relative;z-index:1;display:grid;gap:18px;padding:clamp(64px,10vw,96px) 0}
+    .hero__content h1{margin:0;font-size:clamp(34px,5.8vw,58px);font-weight:800;line-height:1.05}
+    .hero__content p{margin:0;font-size:clamp(16px,2.6vw,20px);color:rgba(255,255,255,.82);max-width:560px}
+    .hero__bullets{margin:0;padding:0;display:grid;gap:10px}
+    .hero__bullets li{list-style:none;display:flex;align-items:center;gap:12px;font-weight:600}
+    .hero__bullets li::before{content:"";width:16px;height:16px;border-radius:50%;background:rgba(249,115,22,.9)}
+    .hero__card{position:relative;z-index:1;background:rgba(255,255,255,.1);border-radius:calc(var(--radius)*1.2);padding:clamp(24px,4vw,36px);backdrop-filter:blur(12px);box-shadow:0 20px 48px rgba(15,23,42,.22);display:grid;gap:16px}
+    .hero__card h2{margin:0;font-size:clamp(22px,3vw,28px)}
+    .hero__card p{margin:0;color:rgba(255,255,255,.82)}
+    .hero__stats{display:grid;gap:14px}
+    .hero__stat{display:grid;gap:2px}
+    .hero__stat strong{font-size:clamp(26px,4vw,34px)}
+    .hero__stat span{color:rgba(255,255,255,.75);font-size:14px}
+    @media (min-width:960px){
+      .hero__inner{grid-template-columns:minmax(0,1.2fr) minmax(0,.8fr)}
+      .hero__card{margin-left:auto;max-width:420px}
+    }
+
+    /* ===== Planner ===== */
+    .planner{background:linear-gradient(180deg,rgba(255,255,255,.7) 0%,rgba(238,242,255,.8) 100%)}
+    .planner__grid{display:grid;gap:32px}
+    .panel{background:var(--surface);border-radius:var(--radius);box-shadow:var(--shadow);border:1px solid rgba(99,102,241,.08);overflow:hidden;display:flex;flex-direction:column}
+    .panel__header{padding:clamp(20px,3vw,28px);border-bottom:1px solid var(--ring);display:grid;gap:8px}
+    .panel__header h2{margin:0;font-size:clamp(24px,3.6vw,30px)}
+    .panel__header p{margin:0;color:var(--muted)}
+    .panel__body{padding:clamp(20px,3vw,32px);display:grid;gap:20px}
+    .muted{color:var(--muted)}
+
+    form{display:grid;gap:18px}
+    label{display:grid;gap:8px;font-weight:600;font-size:15px}
+    input[type="text"],input[type="date"],input[type="number"],input:not([type]){width:100%;padding:14px;border-radius:14px;border:1px solid var(--ring);background:#fff;font-size:15px;color:var(--ink);transition:var(--transition)}
+    input:focus{border-color:var(--primary);box-shadow:0 0 0 4px rgba(99,102,241,.12);outline:none}
+    fieldset{border:1px solid var(--ring);border-radius:16px;padding:18px;display:grid;gap:12px}
+    legend{padding:0 6px;font-weight:600;color:var(--muted)}
+    .chip-group{display:flex;flex-wrap:wrap;gap:12px}
+    .chip{display:inline-flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:var(--surface-muted);border:1px solid rgba(99,102,241,.18);font-weight:500;font-size:14px;cursor:pointer;transition:var(--transition)}
+    .chip input{appearance:none;width:16px;height:16px;border-radius:50%;border:2px solid var(--primary);display:grid;place-items:center;position:relative}
+    .chip input:focus-visible{outline:3px solid rgba(99,102,241,.45);outline-offset:3px}
+    .chip input::after{content:"";width:8px;height:8px;border-radius:50%;background:var(--primary);transform:scale(0);transition:var(--transition)}
+    .chip input:checked::after{transform:scale(1)}
+    .chip:hover{box-shadow:0 12px 24px rgba(99,102,241,.12);transform:translateY(-2px)}
+    fieldset .grid-2{display:grid;gap:12px}
+    @media (min-width:680px){
+      .planner__grid{grid-template-columns:minmax(0,1.1fr) minmax(0,0.9fr)}
+      fieldset .grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}
+    }
+
+    .grid-2{display:grid;gap:14px}
+    @media (min-width:680px){.grid-2{grid-template-columns:repeat(2,minmax(0,1fr))}}
+
+    .actions{display:flex;flex-wrap:wrap;gap:12px}
+
+    .result-placeholder{display:grid;gap:12px;color:var(--muted)}
+    .result-placeholder strong{color:var(--ink)}
+
+    .itinerary{display:grid;gap:16px}
+    .itinerary__header{display:grid;gap:8px}
+    .bullets{margin:0;padding-left:20px;display:grid;gap:8px;color:var(--ink)}
+    .bullets li::marker{color:var(--primary)}
+
+    /* ===== Footer ===== */
+    .footer{border-top:1px solid rgba(215,222,240,.8);padding:36px 0;background:#fff}
+    .footer__inner{display:grid;gap:24px}
+    .footer__top{display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between}
+    .social{display:flex;gap:14px}
+    .social a{width:36px;height:36px;border-radius:50%;background:var(--surface-muted);display:grid;place-items:center;color:var(--primary);transition:var(--transition)}
+    .social a:hover{background:var(--primary);color:#fff}
+    .footer__bottom{color:var(--muted);font-size:14px;display:flex;flex-wrap:wrap;gap:12px;justify-content:space-between}
+    @media (max-width:600px){.footer__bottom{flex-direction:column;align-items:flex-start}}
+
+    @media (prefers-reduced-motion:reduce){
+      *,*::before,*::after{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important;scroll-behavior:auto !important}
     }
   </style>
 </head>
