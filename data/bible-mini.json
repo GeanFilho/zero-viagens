@@ -1,0 +1,67 @@
+{
+  "books": [
+    {
+      "name": "Gênesis",
+      "abbrev": "gn",
+      "chapters": [
+        {
+          "number": 1,
+          "verses": [
+            "No princípio, Deus criou os céus e a terra.",
+            "A terra era sem forma e vazia; havia trevas sobre a face do abismo, e o Espírito de Deus pairava sobre as águas.",
+            "Disse Deus: Haja luz, e houve luz.",
+            "Deus viu que a luz era boa, e separou a luz das trevas."
+          ]
+        },
+        {
+          "number": 2,
+          "verses": [
+            "Assim foram concluídos os céus e a terra, com todo o seu exército.",
+            "No sétimo dia Deus já havia terminado a obra que realizara; e nesse dia descansou de todo o trabalho que havia feito.",
+            "Então abençoou Deus o sétimo dia e o santificou, porque nele descansou de toda a obra que criara e fizera.",
+            "Esta é a história das origens dos céus e da terra no tempo em que foram criados."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Salmos",
+      "abbrev": "sl",
+      "chapters": [
+        {
+          "number": 23,
+          "verses": [
+            "O Senhor é o meu pastor; nada me faltará.",
+            "Deitar-me faz em verdes pastos, guia-me mansamente a águas tranquilas.",
+            "Refrigera a minha alma; guia-me pelas veredas da justiça por amor do seu nome.",
+            "Ainda que eu andasse pelo vale da sombra da morte, não temeria mal algum, porque tu estás comigo; o teu bordão e o teu cajado me consolam."
+          ]
+        },
+        {
+          "number": 46,
+          "verses": [
+            "Deus é o nosso refúgio e fortaleza, socorro bem presente na angústia.",
+            "Portanto, não temeremos, ainda que a terra se mude e os montes se abalem no coração dos mares.",
+            "Há um rio cujas correntes alegram a cidade de Deus, o santuário das moradas do Altíssimo.",
+            "O Senhor dos Exércitos está conosco; o Deus de Jacó é o nosso refúgio."
+          ]
+        }
+      ]
+    },
+    {
+      "name": "João",
+      "abbrev": "jo",
+      "chapters": [
+        {
+          "number": 3,
+          "verses": [
+            "Havia um fariseu chamado Nicodemos, uma autoridade entre os judeus.",
+            "Ele veio a Jesus, à noite, e disse: Rabi, sabemos que ensinas da parte de Deus, pois ninguém pode realizar os sinais milagrosos que estás fazendo se Deus não estiver com ele.",
+            "Em resposta, Jesus declarou: Digo-lhe a verdade: Ninguém pode ver o Reino de Deus se não nascer de novo.",
+            "Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crer não pereça, mas tenha a vida eterna."
+          ]
+        }
+      ]
+    }
+  ]
+}
