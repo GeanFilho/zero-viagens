@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="pt-br">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>APP Religioso — Protótipo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: light;
+      --bg: #0f172a;
+      --surface: #0b1221;
+      --ink: #e2e8f0;
+      --muted: #94a3b8;
+      --primary: #7c3aed;
+      --primary-strong: #5b21b6;
+      --accent: #22d3ee;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #f43f5e;
+      --border: #1e293b;
+      --card: #11182a;
+      --shadow: 0 25px 80px rgba(0,0,0,.4);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: radial-gradient(circle at 20% 20%, rgba(124,58,237,.24), transparent 32%),
+                  radial-gradient(circle at 80% 0%, rgba(34,211,238,.18), transparent 38%),
+                  var(--bg);
+      font-family: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
+      color: var(--ink);
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: clamp(20px, 4vw, 38px);
+      display: grid;
+      gap: 22px;
+    }
+
+    header.hero {
+      background: linear-gradient(135deg, rgba(124,58,237,.25), rgba(34,211,238,.18)), var(--card);
+      border: 1px solid var(--border);
+      border-radius: 26px;
+      padding: clamp(24px, 5vw, 40px);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 16px;
+    }
+
+    .eyebrow { text-transform: uppercase; letter-spacing: .1em; color: var(--muted); font-weight: 700; font-size: 12px; }
+    h1 { margin: 0; font-size: clamp(28px, 4.2vw, 40px); }
+    p { margin: 0; }
+    .muted { color: var(--muted); }
+
+    .cta-row { display: flex; flex-wrap: wrap; gap: 12px; align-items: center; }
+    .btn {
+      border: 1px solid var(--border);
+      background: linear-gradient(120deg, rgba(124,58,237,.9), rgba(34,211,238,.85));
+      color: #fff;
+      padding: 12px 18px;
+      border-radius: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 16px 40px rgba(124,58,237,.35);
+      transition: transform .2s ease, box-shadow .2s ease;
+    }
+    .btn:hover { transform: translateY(-1px); box-shadow: 0 18px 46px rgba(124,58,237,.4); }
+    .btn.secondary { background: var(--card); color: var(--ink); box-shadow: none; }
+
+    .layout { display: grid; gap: 18px; grid-template-columns: 1fr; }
+    @media (min-width: 960px) { .layout { grid-template-columns: 3fr 2fr; } }
+
+    section {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: clamp(18px, 3vw, 24px);
+      box-shadow: var(--shadow);
+      display: grid;
+      gap: 16px;
+    }
+    section h2 { margin: 0; font-size: 20px; }
+
+    .pill { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+    .pill.success { background: rgba(16,185,129,.12); color: #a7f3d0; border: 1px solid rgba(16,185,129,.4); }
+    .pill.warning { background: rgba(245,158,11,.12); color: #fde68a; border: 1px solid rgba(245,158,11,.35); }
+    .pill.muted { background: rgba(148,163,184,.14); color: var(--muted); border: 1px solid var(--border); }
+
+    .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 12px; }
+    .card { background: rgba(255,255,255,.02); border: 1px solid var(--border); border-radius: 12px; padding: 12px; display: grid; gap: 10px; }
+    .card strong { font-size: 15px; }
+
+    .verse-box { background: rgba(124,58,237,.08); border: 1px solid rgba(124,58,237,.4); border-radius: 14px; padding: 12px; display: grid; gap: 6px; }
+    .verse-ref { color: #c4b5fd; font-weight: 700; }
+
+    .actions { display: flex; flex-wrap: wrap; gap: 10px; }
+    .ghost { background: transparent; color: var(--ink); border-color: var(--border); box-shadow: none; }
+
+    .field { display: grid; gap: 6px; }
+    .field label { font-weight: 700; font-size: 14px; }
+    .field input, .field textarea, .field select {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      background: #0c1424;
+      color: var(--ink);
+      font: inherit;
+    }
+    textarea { min-height: 90px; resize: vertical; }
+
+    .list { display: grid; gap: 10px; }
+    .prayer { border: 1px solid var(--border); border-radius: 12px; padding: 12px; background: rgba(255,255,255,.02); }
+    .prayer__header { display: flex; justify-content: space-between; gap: 12px; align-items: center; flex-wrap: wrap; }
+    .status { padding: 4px 10px; border-radius: 999px; font-weight: 700; font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    .status.done { background: rgba(16,185,129,.12); color: #a7f3d0; border: 1px solid rgba(16,185,129,.3); }
+    .status.waiting { background: rgba(245,158,11,.12); color: #fde68a; border: 1px solid rgba(245,158,11,.3); }
+    .status.answered { background: rgba(34,211,238,.1); color: #67e8f9; border: 1px solid rgba(34,211,238,.35); }
+
+    .chips { display: flex; flex-wrap: wrap; gap: 8px; }
+    .chip { padding: 6px 10px; background: rgba(255,255,255,.04); border-radius: 999px; border: 1px solid var(--border); font-size: 12px; color: var(--muted); }
+
+    .tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .tab { padding: 8px 12px; border-radius: 10px; border: 1px solid var(--border); background: rgba(255,255,255,.04); cursor: pointer; color: var(--muted); font-weight: 700; }
+    .tab.active { background: rgba(124,58,237,.14); color: #c4b5fd; border-color: rgba(124,58,237,.5); }
+
+    .bible-grid { display: grid; gap: 12px; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); }
+    .verse { border: 1px solid var(--border); padding: 10px; border-radius: 10px; display: grid; gap: 4px; cursor: pointer; position: relative; }
+    .verse.highlight { border-color: rgba(34,211,238,.6); box-shadow: 0 0 0 2px rgba(34,211,238,.2); }
+    .verse .fav { position: absolute; right: 10px; top: 10px; color: #fcd34d; font-size: 16px; display: none; }
+    .verse.is-fav .fav { display: inline; }
+
+    .badge-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .badge { padding: 6px 8px; border-radius: 8px; border: 1px solid var(--border); background: rgba(255,255,255,.03); font-weight: 700; color: #cbd5e1; }
+
+    .inline { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+    .small { font-size: 13px; color: var(--muted); }
+    .divider { height: 1px; background: var(--border); border: 0; }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <header class="hero">
+      <div class="eyebrow">Protótipo navegável</div>
+      <h1>APP Religioso simplificado</h1>
+      <p class="muted">Versículo do dia, área de orações com histórico, leitura básica da Bíblia e modo devocional com gamificação. Tudo offline-first com cache local.</p>
+      <div class="cta-row">
+        <button class="btn" id="devocionalBtn">Iniciar devocional</button>
+        <button class="btn secondary" id="ultimaLeitura">Continuar de onde parei</button>
+        <span class="small">Notificações opcionais e compartilhamento rápido</span>
+      </div>
+    </header>
+
+    <div class="layout">
+      <div class="stack">
+        <section id="versiculo">
+          <div class="inline"><h2>Versículo do Dia</h2><span class="pill success">Ao vivo</span></div>
+          <p class="muted">Puxa automaticamente da API Abibliadigital (PT-BR) e mantém um fallback offline.</p>
+          <div class="verse-box" id="verseBox">
+            <div class="small">Carregando versículo...</div>
+          </div>
+          <div class="actions">
+            <button class="btn ghost" id="copiarVerso">Copiar</button>
+            <button class="btn ghost" id="compartilharVerso">Compartilhar</button>
+            <button class="btn ghost" id="atualizarVerso">Atualizar</button>
+          </div>
+          <div class="small" id="verseStatus"></div>
+        </section>
+
+        <section id="oracoes">
+          <div class="inline"><h2>Área de Orações</h2><span class="pill warning">Offline-first</span></div>
+          <p class="muted">Crie orações personalizadas, salve no dispositivo, acompanhe status e histórico.</p>
+          <div class="tabs" id="filtros">
+            <button class="tab active" data-filter="all">Todas</button>
+            <button class="tab" data-filter="waiting">Aguardando</button>
+            <button class="tab" data-filter="done">Realizadas</button>
+            <button class="tab" data-filter="answered">Atendidas ✨</button>
+          </div>
+
+          <form id="formOracao" class="card">
+            <strong>Nova oração</strong>
+            <div class="field">
+              <label for="titulo">Título</label>
+              <input id="titulo" required placeholder="Ex.: Mãe, trabalho, saúde..." />
+            </div>
+            <div class="field">
+              <label for="categoria">Categoria</label>
+              <input id="categoria" placeholder="Família, trabalho, agradecimento" />
+            </div>
+            <div class="field">
+              <label for="conteudo">Oração</label>
+              <textarea id="conteudo" required placeholder="Escreva a oração aqui"></textarea>
+            </div>
+            <div class="field">
+              <label for="status">Status</label>
+              <select id="status">
+                <option value="waiting">Aguardando resposta</option>
+                <option value="done">Realizada</option>
+                <option value="answered">Atendida ✨</option>
+              </select>
+            </div>
+            <button class="btn" type="submit">Salvar oração</button>
+          </form>
+
+          <div class="list" id="listaOracoes"></div>
+        </section>
+
+        <section id="devocional">
+          <div class="inline"><h2>Modo Devocional</h2><span class="pill success">Diário</span></div>
+          <p class="muted">Texto curto, reflexão, versículo e pequena oração. Contador de streak e badges.</p>
+          <div class="card" id="devocionalCard"></div>
+          <div class="badge-row" id="badges"></div>
+        </section>
+      </div>
+
+      <div class="stack">
+        <section id="notificacoes">
+          <div class="inline"><h2>Notificações</h2><span class="pill muted">Config.</span></div>
+          <p class="muted">Lembrete diário para oração e alerta do versículo do dia. Frequência configurável.</p>
+          <div class="card-grid">
+            <div class="card">
+              <strong>Hora da oração</strong>
+              <p class="muted">Defina um horário e receba um lembrete local.</p>
+              <div class="field">
+                <label for="hora">Horário</label>
+                <input type="time" id="hora" />
+              </div>
+              <button class="btn ghost" id="salvarNotificacao">Salvar lembrete</button>
+              <small id="notificacaoStatus" class="muted"></small>
+            </div>
+            <div class="card">
+              <strong>Versículo do dia</strong>
+              <p class="muted">Alertas silenciosos. Permita notificações do navegador.</p>
+              <div class="actions">
+                <button class="btn ghost" id="pedirPermissao">Permitir</button>
+                <button class="btn ghost" id="testarAlerta">Teste rápido</button>
+              </div>
+              <small class="muted" id="alertaStatus"></small>
+            </div>
+          </div>
+        </section>
+
+        <section id="biblia">
+          <div class="inline"><h2>Leitura da Bíblia</h2><span class="pill success">Favoritos</span></div>
+          <p class="muted">Escolha livro e capítulo, busque por palavra, marque destaques e favoritos. Salva último progresso.</p>
+          <div class="card-grid">
+            <div class="card">
+              <strong>Livros</strong>
+              <div class="chips" id="livros"></div>
+            </div>
+            <div class="card">
+              <strong>Capítulos</strong>
+              <div class="chips" id="capitulos"></div>
+            </div>
+            <div class="card">
+              <strong>Busca</strong>
+              <div class="field">
+                <label for="busca">Palavra-chave</label>
+                <input id="busca" placeholder="amor, fé, paz" />
+              </div>
+              <button class="btn ghost" id="buscar">Buscar</button>
+              <small class="muted" id="resultadoBusca"></small>
+            </div>
+          </div>
+          <hr class="divider" />
+          <div class="bible-grid" id="verses"></div>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const verseBox = document.getElementById('verseBox');
+    const verseStatus = document.getElementById('verseStatus');
+    let currentVerse = null;
+
+    async function carregarVersiculo() {
+      verseBox.innerHTML = '<div class="small">Carregando versículo...</div>';
+      verseStatus.textContent = '';
+      try {
+        const resp = await fetch('https://www.abibliadigital.com.br/api/verses/acf/random');
+        if (!resp.ok) throw new Error('Erro na API');
+        const data = await resp.json();
+        currentVerse = {
+          text: data.text || 'Texto não disponível.',
+          ref: `${data.book?.name || 'Livro'} ${data.chapter}:${data.number}`
+        };
+        renderVerse();
+        verseStatus.textContent = 'Fonte: Abibliadigital.com.br (PT-BR)';
+      } catch (err) {
+        currentVerse = {
+          text: 'Porque Deus amou o mundo de tal maneira que deu o seu Filho unigênito, para que todo o que nele crê não pereça, mas tenha a vida eterna.',
+          ref: 'João 3:16 (offline)'
+        };
+        renderVerse();
+        verseStatus.textContent = 'Modo offline — usando cache local.';
+      }
+      localStorage.setItem('lastVerse', JSON.stringify(currentVerse));
+    }
+
+    function renderVerse() {
+      verseBox.innerHTML = `<div class="verse-ref">${currentVerse.ref}</div><div>${currentVerse.text}</div>`;
+    }
+
+    document.getElementById('copiarVerso').addEventListener('click', async () => {
+      if (!currentVerse) return;
+      await navigator.clipboard.writeText(`${currentVerse.ref} — ${currentVerse.text}`);
+      verseStatus.textContent = 'Versículo copiado.';
+    });
+
+    document.getElementById('compartilharVerso').addEventListener('click', async () => {
+      if (!currentVerse) return;
+      const shareData = { title: 'Versículo do Dia', text: `${currentVerse.ref} — ${currentVerse.text}` };
+      if (navigator.share) {
+        try { await navigator.share(shareData); verseStatus.textContent = 'Compartilhado!'; }
+        catch { verseStatus.textContent = 'Compartilhamento cancelado.'; }
+      } else {
+        await navigator.clipboard.writeText(shareData.text);
+        verseStatus.textContent = 'Copiado para compartilhar.';
+      }
+    });
+    document.getElementById('atualizarVerso').addEventListener('click', carregarVersiculo);
+
+    const storedVerse = localStorage.getItem('lastVerse');
+    if (storedVerse) { currentVerse = JSON.parse(storedVerse); renderVerse(); verseStatus.textContent = 'Usando cache local.'; }
+    else { carregarVersiculo(); }
+
+    /* ===================== ORAÇÕES ===================== */
+    const listaOracoes = document.getElementById('listaOracoes');
+    const formOracao = document.getElementById('formOracao');
+    const filtros = document.getElementById('filtros');
+    let filtroAtual = 'all';
+
+    function getOracoes() {
+      return JSON.parse(localStorage.getItem('oracoes') || '[]');
+    }
+    function salvarOracoes(arr) {
+      localStorage.setItem('oracoes', JSON.stringify(arr));
+    }
+
+    function renderOracoes() {
+      const oracoes = getOracoes().filter(o => filtroAtual === 'all' || o.status === filtroAtual);
+      listaOracoes.innerHTML = '';
+      if (!oracoes.length) {
+        listaOracoes.innerHTML = '<div class="muted">Nenhuma oração salva.</div>';
+        return;
+      }
+      oracoes.forEach(o => {
+        const card = document.createElement('div');
+        card.className = 'prayer';
+        card.innerHTML = `
+          <div class="prayer__header">
+            <div>
+              <strong>${o.titulo}</strong>
+              <div class="small">${new Date(o.data).toLocaleDateString('pt-BR')}</div>
+            </div>
+            <span class="status ${o.status}">${statusLabel(o.status)}</span>
+          </div>
+          <p>${o.conteudo}</p>
+          <div class="chips">
+            <span class="chip">${o.categoria || 'Sem categoria'}</span>
+            <button class="btn ghost" data-id="${o.id}" data-action="status">Alterar status</button>
+            <button class="btn ghost" data-id="${o.id}" data-action="delete">Remover</button>
+          </div>`;
+        listaOracoes.appendChild(card);
+      });
+    }
+
+    function statusLabel(s) {
+      return s === 'done' ? 'Realizada' : s === 'answered' ? 'Atendida ✨' : 'Aguardando resposta';
+    }
+
+    formOracao.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const novo = {
+        id: crypto.randomUUID(),
+        titulo: document.getElementById('titulo').value,
+        categoria: document.getElementById('categoria').value,
+        conteudo: document.getElementById('conteudo').value,
+        status: document.getElementById('status').value,
+        data: new Date().toISOString()
+      };
+      const oracoes = getOracoes();
+      oracoes.unshift(novo);
+      salvarOracoes(oracoes);
+      formOracao.reset();
+      renderOracoes();
+    });
+
+    filtros.addEventListener('click', (e) => {
+      if (!e.target.matches('.tab')) return;
+      filtros.querySelectorAll('.tab').forEach(btn => btn.classList.remove('active'));
+      e.target.classList.add('active');
+      filtroAtual = e.target.dataset.filter;
+      renderOracoes();
+    });
+
+    listaOracoes.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const { id, action } = btn.dataset;
+      const oracoes = getOracoes();
+      const item = oracoes.find(o => o.id === id);
+      if (!item) return;
+      if (action === 'status') {
+        const seq = ['waiting', 'done', 'answered'];
+        const idx = seq.indexOf(item.status);
+        item.status = seq[(idx + 1) % seq.length];
+      }
+      if (action === 'delete') {
+        const idx = oracoes.indexOf(item);
+        oracoes.splice(idx,1);
+      }
+      salvarOracoes(oracoes);
+      renderOracoes();
+    });
+
+    renderOracoes();
+
+    /* ===================== DEVOCIONAL ===================== */
+    const devocionalCard = document.getElementById('devocionalCard');
+    const badgesEl = document.getElementById('badges');
+    const devocionalBtn = document.getElementById('devocionalBtn');
+
+    const devocionais = [
+      { titulo: 'Confiança', texto: 'Confie no Senhor mesmo quando o caminho parecer incerto.', versiculo: 'Provérbios 3:5', oracao: 'Senhor, guia meu coração a depender de Ti.' },
+      { titulo: 'Gratidão', texto: 'A gratidão abre espaço para novos milagres.', versiculo: '1 Tessalonicenses 5:18', oracao: 'Obrigado por cada detalhe do meu dia.' },
+      { titulo: 'Perseverança', texto: 'Continue firme: a colheita vem após a persistência.', versiculo: 'Gálatas 6:9', oracao: 'Renova minhas forças e minha fé.' }
+    ];
+
+    function getStreak() { return Number(localStorage.getItem('streak') || 0); }
+    function setStreak(v) { localStorage.setItem('streak', v); }
+    function getLastDevocionalDate() { return localStorage.getItem('lastDevocional'); }
+
+    function renderDevocional() {
+      const today = new Date().toISOString().slice(0,10);
+      const entry = devocionais[new Date().getDate() % devocionais.length];
+      devocionalCard.innerHTML = `
+        <div class="inline"><strong>${entry.titulo}</strong><span class="pill muted">${entry.versiculo}</span></div>
+        <p>${entry.texto}</p>
+        <div class="verse-box">${entry.oracao}</div>
+        <div class="inline"><span class="badge">Streak: ${getStreak()} dias</span><button class="btn ghost" id="concluirDevocional">Concluir dia</button></div>
+        <small class="muted">Devocional de ${today}</small>`;
+      document.getElementById('concluirDevocional').addEventListener('click', () => {
+        const last = getLastDevocionalDate();
+        const streak = getStreak();
+        if (last === today) return;
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        const ymd = yesterday.toISOString().slice(0,10);
+        const newStreak = last === ymd ? streak + 1 : 1;
+        setStreak(newStreak);
+        localStorage.setItem('lastDevocional', today);
+        renderDevocional();
+        renderBadges();
+      });
+    }
+
+    function renderBadges() {
+      badgesEl.innerHTML = '';
+      const streak = getStreak();
+      const milestones = [7,30,100];
+      milestones.forEach(m => {
+        const badge = document.createElement('span');
+        badge.className = 'badge';
+        badge.textContent = streak >= m ? `🏅 ${m} dias` : `${m} dias`;
+        badgesEl.appendChild(badge);
+      });
+    }
+
+    devocionalBtn.addEventListener('click', () => {
+      document.getElementById('devocional').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    renderDevocional();
+    renderBadges();
+
+    /* ===================== NOTIFICAÇÕES ===================== */
+    const horaInput = document.getElementById('hora');
+    const notificacaoStatus = document.getElementById('notificacaoStatus');
+    const alertaStatus = document.getElementById('alertaStatus');
+
+    document.getElementById('salvarNotificacao').addEventListener('click', () => {
+      const val = horaInput.value;
+      if (!val) { notificacaoStatus.textContent = 'Escolha um horário.'; return; }
+      localStorage.setItem('lembrete-oracao', val);
+      notificacaoStatus.textContent = `Lembrete salvo para ${val}. (Simulado local)`;
+    });
+
+    document.getElementById('pedirPermissao').addEventListener('click', async () => {
+      if (!('Notification' in window)) { alertaStatus.textContent = 'Navegador sem suporte.'; return; }
+      const perm = await Notification.requestPermission();
+      alertaStatus.textContent = perm === 'granted' ? 'Permissão concedida.' : 'Permissão negada ou ignorada.';
+    });
+
+    document.getElementById('testarAlerta').addEventListener('click', () => {
+      if (!('Notification' in window) || Notification.permission !== 'granted') {
+        alertaStatus.textContent = 'Ative as notificações antes de testar.';
+        return;
+      }
+      new Notification('Versículo do dia', { body: currentVerse ? `${currentVerse.ref}` : 'Confira o app.' });
+      alertaStatus.textContent = 'Notificação enviada (teste local).';
+    });
+
+    /* ===================== BÍBLIA ===================== */
+    const livrosEl = document.getElementById('livros');
+    const capitulosEl = document.getElementById('capitulos');
+    const versesEl = document.getElementById('verses');
+    const buscaInput = document.getElementById('busca');
+    const resultadoBusca = document.getElementById('resultadoBusca');
+    const ultimaLeituraBtn = document.getElementById('ultimaLeitura');
+
+    const biblia = [
+      {
+        nome: 'Salmos',
+        capitulos: [
+          { numero: 23, versiculos: [
+            { n: 1, t: 'O Senhor é o meu pastor; nada me faltará.' },
+            { n: 2, t: 'Deitar-me faz em verdes pastos, guia-me mansamente a águas tranquilas.' },
+            { n: 3, t: 'Refrigera a minha alma; guia-me nas veredas da justiça por amor do seu nome.' }
+          ]}
+        ]
+      },
+      {
+        nome: 'João',
+        capitulos: [
+          { numero: 1, versiculos: [
+            { n: 1, t: 'No princípio era o Verbo, e o Verbo estava com Deus, e o Verbo era Deus.' },
+            { n: 5, t: 'E a luz resplandece nas trevas, e as trevas não a compreenderam.' },
+            { n: 12, t: 'Mas, a todos quantos o receberam, deu-lhes o poder de serem feitos filhos de Deus.' }
+          ]}
+        ]
+      },
+      {
+        nome: 'Romanos',
+        capitulos: [
+          { numero: 8, versiculos: [
+            { n: 28, t: 'Todas as coisas cooperam para o bem daqueles que amam a Deus.' },
+            { n: 31, t: 'Se Deus é por nós, quem será contra nós?' },
+            { n: 38, t: 'Nem morte nem vida poderão nos separar do amor de Deus.' }
+          ]}
+        ]
+      }
+    ];
+
+    let selecionado = { livro: null, cap: null };
+    const favoritos = new Set(JSON.parse(localStorage.getItem('favoritos') || '[]'));
+    const destaques = new Set(JSON.parse(localStorage.getItem('destaques') || '[]'));
+
+    function salvarFavoritos() { localStorage.setItem('favoritos', JSON.stringify([...favoritos])); }
+    function salvarDestaques() { localStorage.setItem('destaques', JSON.stringify([...destaques])); }
+
+    function renderLivros() {
+      livrosEl.innerHTML = '';
+      biblia.forEach((livro, idx) => {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.textContent = livro.nome;
+        chip.addEventListener('click', () => { selecionado.livro = idx; selecionado.cap = 0; renderCapitulos(); renderVersiculos(); salvarUltimaLeitura(); });
+        livrosEl.appendChild(chip);
+      });
+    }
+
+    function renderCapitulos() {
+      capitulosEl.innerHTML = '';
+      if (selecionado.livro === null) return;
+      biblia[selecionado.livro].capitulos.forEach((cap, idx) => {
+        const chip = document.createElement('button');
+        chip.className = 'chip';
+        chip.textContent = `Cap. ${cap.numero}`;
+        chip.addEventListener('click', () => { selecionado.cap = idx; renderVersiculos(); salvarUltimaLeitura(); });
+        capitulosEl.appendChild(chip);
+      });
+    }
+
+    function verseKey(l, c, n) { return `${l}-${c}-${n}`; }
+
+    function renderVersiculos(lista = null) {
+      versesEl.innerHTML = '';
+      const versiculos = lista || (selecionado.livro !== null && selecionado.cap !== null ? biblia[selecionado.livro].capitulos[selecionado.cap].versiculos : []);
+      if (!versiculos.length) { versesEl.innerHTML = '<div class="muted">Selecione um livro e capítulo.</div>'; return; }
+      versiculos.forEach(v => {
+        const key = verseKey(selecionado.livro, selecionado.cap, v.n);
+        const card = document.createElement('div');
+        card.className = 'verse';
+        if (destaques.has(key)) card.classList.add('highlight');
+        if (favoritos.has(key)) card.classList.add('is-fav');
+        card.innerHTML = `<span class="fav">★</span><strong>v${v.n}</strong><span>${v.t}</span>`;
+        card.addEventListener('click', () => {
+          if (destaques.has(key)) destaques.delete(key); else destaques.add(key);
+          salvarDestaques();
+          renderVersiculos(lista);
+          salvarUltimaLeitura(key);
+        });
+        const favBtn = document.createElement('button');
+        favBtn.className = 'btn ghost';
+        favBtn.textContent = favoritos.has(key) ? 'Remover favorito' : 'Favoritar';
+        favBtn.addEventListener('click', (e) => {
+          e.stopPropagation();
+          if (favoritos.has(key)) favoritos.delete(key); else favoritos.add(key);
+          salvarFavoritos();
+          renderVersiculos(lista);
+        });
+        card.appendChild(favBtn);
+        versesEl.appendChild(card);
+      });
+    }
+
+    function salvarUltimaLeitura(key) {
+      const data = { livro: selecionado.livro, cap: selecionado.cap, versiculo: key || null };
+      localStorage.setItem('ultima-leitura', JSON.stringify(data));
+    }
+
+    ultimaLeituraBtn.addEventListener('click', () => {
+      const data = JSON.parse(localStorage.getItem('ultima-leitura') || 'null');
+      if (!data) return;
+      selecionado = { livro: data.livro, cap: data.cap };
+      renderCapitulos();
+      if (data.versiculo) destaques.add(data.versiculo);
+      renderVersiculos();
+      document.getElementById('biblia').scrollIntoView({ behavior: 'smooth' });
+    });
+
+    document.getElementById('buscar').addEventListener('click', () => {
+      const termo = buscaInput.value.trim().toLowerCase();
+      if (!termo) { resultadoBusca.textContent = 'Digite uma palavra.'; return; }
+      const resultados = [];
+      biblia.forEach((livro, li) => livro.capitulos.forEach((cap, ci) => cap.versiculos.forEach(v => {
+        if (v.t.toLowerCase().includes(termo)) resultados.push({ v, li, ci });
+      })));
+      if (!resultados.length) { resultadoBusca.textContent = 'Nenhum versículo encontrado.'; versesEl.innerHTML = ''; return; }
+      resultadoBusca.textContent = `${resultados.length} resultado(s). Clique para destacar.`;
+      renderVersiculos(resultados.map(r => r.v));
+      // store selection for highlight actions
+      selecionado = { livro: resultados[0].li, cap: resultados[0].ci };
+    });
+
+    renderLivros();
+
+    /* ===================== INIT ===================== */
+    window.addEventListener('DOMContentLoaded', () => {
+      const lembrete = localStorage.getItem('lembrete-oracao');
+      if (lembrete) horaInput.value = lembrete;
+      const ultima = JSON.parse(localStorage.getItem('ultima-leitura') || 'null');
+      if (ultima) { selecionado = { livro: ultima.livro, cap: ultima.cap }; renderCapitulos(); renderVersiculos(); }
+    });
+  </script>
+</body>
+</html>

@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Aplicativo de Devoção</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../css/faith-app.css" />
+</head>
+<body>
+  <main class="app-shell">
+    <header class="hero">
+      <div class="hero__meta">
+        <span class="badge">Protótipo funcional</span>
+        <span class="badge">Versículo + Orações + Bíblia</span>
+      </div>
+      <h1>Seu hub diário de fé, organizado como aplicativo</h1>
+      <p>Versículo do dia com cópia e compartilhamento, área completa de orações, leitura bíblica com destaques e devocional com streak gamificado.</p>
+      <div class="tabs">
+        <button class="tab-btn active" data-tab="home">Início</button>
+        <button class="tab-btn" data-tab="prayers">Orações</button>
+        <button class="tab-btn" data-tab="bible">Bíblia</button>
+        <button class="tab-btn" data-tab="devotional">Devocional</button>
+        <button class="tab-btn" data-tab="settings">Ajustes</button>
+      </div>
+      <div class="card-grid">
+        <div class="card">
+          <strong>Streak devocional</strong>
+          <div id="streakCount">0 dias</div>
+          <div id="badgeList" class="small">Carregando badges...</div>
+        </div>
+        <div class="card">
+          <strong>Notificações</strong>
+          <div class="small">Lembrete diário configurável e aviso do versículo.</div>
+          <div class="small">Tudo fica salvo localmente.</div>
+        </div>
+      </div>
+    </header>
+
+    <section data-view="home">
+      <h2>Versículo do dia</h2>
+      <div id="verseCard" class="verse-box"></div>
+    </section>
+
+    <section data-view="prayers" hidden>
+      <header>
+        <h2>Área de orações</h2>
+        <p class="small">Crie pedidos, acompanhe status e organize tags.</p>
+      </header>
+      <form id="prayerForm" class="fields">
+        <div class="field">
+          <label for="title">Título</label>
+          <input id="title" name="title" required placeholder="Ex: Proteção na viagem" />
+        </div>
+        <div class="field">
+          <label for="body">Detalhes</label>
+          <textarea id="body" name="body" required placeholder="Descreva o pedido ou agradecimento"></textarea>
+        </div>
+        <div class="field">
+          <label for="tags">Tags (separadas por vírgula)</label>
+          <input id="tags" name="tags" placeholder="família, trabalho" />
+        </div>
+        <button class="btn" type="submit">Salvar oração</button>
+      </form>
+      <div class="tabs">
+        <button class="tab-btn active" data-prayer-filter="all">Todas</button>
+        <button class="tab-btn" data-prayer-filter="pending">Registradas</button>
+        <button class="tab-btn" data-prayer-filter="waiting">Aguardando resposta</button>
+        <button class="tab-btn" data-prayer-filter="answered">Atendidas ✨</button>
+      </div>
+      <div id="prayerList" class="list"></div>
+    </section>
+
+    <section data-view="bible" hidden>
+      <header>
+        <h2>Leitura da Bíblia</h2>
+        <p class="small">Continue de onde parou, faça buscas e destaque versos.</p>
+      </header>
+      <div class="bible">
+        <div class="field">
+          <label for="bibleSearch">Busca rápida por palavra</label>
+          <input id="bibleSearch" placeholder="ex: refúgio" />
+        </div>
+        <div class="bible__columns">
+          <div class="book-list" id="bookList"></div>
+          <div class="chapter-list" id="chapterList"></div>
+        </div>
+        <div id="verseArea" class="list"></div>
+        <div>
+          <h3>Resultados da busca</h3>
+          <div id="searchResults" class="list"></div>
+        </div>
+      </div>
+    </section>
+
+    <section data-view="devotional" hidden>
+      <header>
+        <h2>Modo devocional</h2>
+        <p class="small">Texto curto + reflexão + oração final com gamificação.</p>
+      </header>
+      <div class="card">
+        <strong id="devoTitle"></strong>
+        <div class="tag" id="devoVerse"></div>
+        <p id="devoBody"></p>
+        <p class="muted" id="devoPrayer"></p>
+        <button id="completeDevo" class="btn">Marcar como feito</button>
+      </div>
+    </section>
+
+    <section data-view="settings" hidden>
+      <header>
+        <h2>Ajustes e notificações</h2>
+        <p class="small">Os lembretes são simulados localmente.</p>
+      </header>
+      <div class="fields">
+        <div class="field">
+          <label><input type="checkbox" id="prayerReminder" /> Ativar lembrete diário de oração</label>
+          <div class="small">Hora configurável abaixo</div>
+        </div>
+        <div class="field">
+          <label for="reminderHour">Horário</label>
+          <input type="time" id="reminderHour" value="07:00" />
+        </div>
+        <div class="field">
+          <label><input type="checkbox" id="verseAlert" checked /> Notificar novo versículo do dia</label>
+        </div>
+      </div>
+    </section>
+  </main>
+  <div class="toast" aria-live="polite"></div>
+  <script type="module" src="../js/faith/app.js"></script>
+</body>
+</html>
